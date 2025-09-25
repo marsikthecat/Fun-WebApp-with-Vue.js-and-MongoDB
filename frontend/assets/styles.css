@@ -1,0 +1,371 @@
+#global
+{
+    background: bisque url(../public/graphicComponents/pictures/background.jpg) no-repeat fixed;
+    overflow: hidden;
+}
+
+#menubar
+{
+    display: none;
+    background: linear-gradient(to right, red, blue);
+    width: 100%;
+}
+#menubar button
+{
+    background: none;
+    font-size: 2.3em;
+    padding: 5px 0 5px 5px;
+}
+
+h1
+{
+    font-size: 2.5em;
+    line-height: 1.4em;
+    font-weight: 100;
+    color: #fff;
+    margin: 0;
+    padding: 1em 10px;
+}
+h2
+{
+    font-size: 1.65em;
+    font-weight: 100;
+    color: #2F2D2C;
+    margin: 0;
+    padding: 0.8em 0;
+}
+p
+{
+    line-height: 1.3em;
+    margin: 0;
+    padding: 0.5em 0 0.5em 0
+}
+ul
+{
+    margin: 0;
+    padding: 0;
+}
+li
+{
+    cursor: pointer;
+    list-style: square;
+    margin: 0.32em 0 0.32em 0;
+}
+img, video
+{
+    width: 100%;
+}
+a
+{
+    text-decoration: none;
+}
+button
+{
+    border: none;
+    cursor: pointer;
+}
+input,textarea,button
+{
+    outline: none;
+}
+video
+{
+    object-fit: cover;
+}
+
+header
+{
+    display: block;
+    background: #2F2C2C;
+    text-align: center;
+}
+
+.logoutBtn
+{
+    position: fixed;
+    z-index: 1;
+    top: 5%;
+    right: -5%;
+    font-size: 1.2em;
+    padding: 10px 20px;
+    background: #9687fd;
+    color: white;
+    opacity: 0;
+    transition: 0.8s ease-in-out;
+    transition-property: opacity, right;
+}
+.logoutBtn:hover
+{
+    background: #6759cc;
+}
+.showLogout
+{
+    right: 0;
+    opacity: 1;
+}
+
+#popup
+{
+    padding: 1em;
+    background-color: white;
+    font-size: 10pt;
+    border-radius: 8px;
+    z-index: 2;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    position: fixed;
+    top: 15%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 400px;
+}
+#popup button
+{
+    width: 80px;
+    padding: 8px;
+    background: #007bff;
+    color: white;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    float: right;
+}
+#popup button:hover
+{
+    background: #0056b3;
+}
+.popup-enter-active
+{
+    animation: bounce-in 0.2s cubic-bezier(1, 0.5, 0.8, 1);
+}
+.popup-leave-active
+{
+    animation: bounce-in 0.2s reverse;
+}
+@keyframes bounce-in
+{
+    from
+    {
+        transform: translate(-50%, -70%);
+        opacity: 0;
+    }
+    to
+    {
+        transform:  translate(-50%, -50%);
+        opacity: 1;
+    }
+}
+
+nav
+{
+    display: block;
+    background-color: #38b2a3;
+    text-align: center;
+}
+nav a
+{
+    color: white;
+    font-size: 1em;
+    padding: 10px 15px;
+    display: inline-block;
+}
+nav a:hover
+{
+    background-color: #b2e7dc;
+    color: #1f1f1f;
+}
+
+article
+{
+    width: 90%;
+    max-width: 700px;
+    background: #FFFFFF;
+    margin: 2.5em auto;
+    padding-bottom: 2em;
+}
+article img
+{
+    box-shadow: 0 0 10px 2px #4c4948;
+    border-radius: 5px;
+}
+article ul
+{
+    padding-left: 15px;
+}
+article section
+{
+    margin: 0 8% 0 8%;
+    max-width: 700px;
+}
+
+footer
+{
+    background: #2F2C2C;
+    height: 270px;
+}
+footer section
+{
+    width: 33.33%;
+    float: left;
+}
+footer section ul li
+{
+    color: #E2DBDB;
+    margin: 0 0 0.3em 3em;
+}
+footer section ul li a
+{
+    font-size: 0.8em;
+}
+footer section h2
+{
+    color: #E2DBDB;
+    text-align: center;
+    font-size: 1.3em;
+}
+footer section p
+{
+    color: #E2DBDB;
+    font-size: 0.8em;
+    padding: 0 0.8em 1em 0.8em;
+}
+footer section i
+{
+    padding-right: 1em;
+}
+
+footer section form input
+{
+    width: 90%;
+    padding: 5px 1% 5px 1%;
+    font-size: 0.9em;
+}
+footer section form textarea
+{
+    width: 90%;
+    height: 6em;
+    padding: 5px 1% 5px 1%;
+    font-size: 0.9em;
+}
+footer section form .messageSubmit
+{
+    border: 1px solid grey;
+    width: 30%;
+    padding: 6px 0 6px 0;
+    cursor: pointer;
+}
+footer section form .messageSubmit:hover
+{
+    border: 1px solid red;
+}
+
+#unterFooter, #unterFooter2
+{
+    background: #343a40;
+    border-top: 1px solid #686868;
+}
+#unterFooter ul, #unterFooter2 ul
+{
+    text-align: center;
+}
+#unterFooter ul li, #unterFooter2 ul li
+{
+    display: inline;
+    font-size: 0.8em;
+    line-height: 2.7em;
+    cursor: pointer;
+    color: #E2DBDB;
+    padding: 0 0.6em 0 0.6em;
+}
+#unterFooter ul li a
+{
+    color: #E2DBDB;
+}
+#unterFooter ul li a:hover
+{
+    text-decoration: underline;
+}
+#unterFooter2
+{
+    padding: 1em;
+}
+#unterFooter
+{
+    padding: 0.3em;
+}
+
+@media screen and (max-width: 800px)
+{
+    body
+    {
+        font-size: 90%;
+    }
+}
+@media screen and (max-width: 550px)
+{
+    body, option
+    {
+        font-size: 85%;
+    }
+    article
+    {
+        margin: 0.6em 0 0 0;
+        width: 100%;
+    }
+    footer
+    {
+        height: auto;
+        font-size: 112%;
+    }
+    footer section
+    {
+        width: 100%;
+        float: none;
+        min-height: 120px;
+    }
+    footer section ul
+    {
+        padding-bottom: 20px;
+    }
+    footer section form
+    {
+        padding-bottom: 20px;
+        margin: 0 auto;
+        text-align: center;
+        width: 85%;
+    }
+}
+@media screen and (min-width: 380px)
+{
+    nav
+    {
+        display: block !important;
+    }
+}
+@media screen and (max-width: 380px)
+{
+    body
+    {
+        font-size: 70%;
+    }
+    #menubar
+    {
+        display: block;
+    }
+    header,#unterFooter
+    {
+        font-size: 95%;
+    }
+    nav a
+    {
+        font-size: 1.3em;
+        display: block;
+    }
+}
+@media screen and (max-width: 290px)
+{
+    article section
+    {
+        margin: 0 12px 0 12px;
+    }
+}
