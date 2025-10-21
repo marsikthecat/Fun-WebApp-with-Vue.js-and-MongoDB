@@ -50,21 +50,21 @@ ul
 }
 h2
 {
-  font-size: 1.85em;
+  padding: 0.5em;
 }
 .card
 {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  width: 100%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.6);
+  width: 90%;
   max-width: 900px;
-  margin: auto;
+  margin: 1em auto;
   text-align: center;
 }
 .title
 {
   color: #4f4f4f;;
   font-size: 1.25em;
-  padding: 2px 8px;
+  padding: 5px 8px 10px 8px;
 }
 h3
 {
@@ -84,7 +84,10 @@ button
   background-color: #000;
   cursor: pointer;
   width: 100%;
-  margin-top: 0.5em;
+}
+button:hover
+{
+  background-color: #262626;
 }
 #containerLeft, #containerMiddle, #containerRight
 {

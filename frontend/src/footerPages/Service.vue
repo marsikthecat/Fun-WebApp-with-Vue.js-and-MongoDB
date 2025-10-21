@@ -5,10 +5,8 @@ import {customPopup} from "../../assets/features.js";
 const date = new Date();
 date.setFullYear(date.getFullYear() + 2);
 date.setMonth(date.getMonth() + 4);
-const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August",
-  "September", "Oktober", "November", "Dezember"];
-const dateTxt = ref("Expiration date: " +
-    monthNames[date.getMonth()] + " " + date.getFullYear());
+const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "Oktober", "November", "Dezember"];
+const dateTxt = ref("Expiration date: " + monthNames[date.getMonth()] + " " + date.getFullYear());
 </script>
 
 <template>
@@ -39,6 +37,10 @@ const dateTxt = ref("Expiration date: " +
   margin: 1em auto;
   max-width: 600px;
   background-color: #f1f1f1;
+}
+h2
+{
+  padding: 0.5em 0;
 }
 .container
 {

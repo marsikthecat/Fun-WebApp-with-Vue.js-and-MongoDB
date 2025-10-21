@@ -84,12 +84,12 @@ export default {
 {
   content: '';
   position: absolute;
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
   right: -15px;
   background-color: white;
-  border: 3px solid #FF9F55;
-  top: 10px;
+  border: 4px solid #FF9F55;
+  top: 15px;
   border-radius: 50%;
   z-index: 1;
 }
@@ -132,9 +132,8 @@ export default {
 .content
 {
   font-size: 0.85em;
-  padding: 3px 12px;
+  padding: 5px 10px;
   background-color: #cdfcff;
-  position: relative;
   border-radius: 6px;
   box-shadow: 3px 3px 10px -2px;
 }

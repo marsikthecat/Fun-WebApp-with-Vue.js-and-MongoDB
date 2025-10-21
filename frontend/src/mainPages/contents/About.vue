@@ -13,9 +13,7 @@ const i = ref(0);
 let intervalId = null;
 
 onMounted(() => {
-  intervalId = setInterval(() => {
-    i.value = (i.value + 1) % images.value.length;
-  }, 4000);
+  intervalId = setInterval(() => i.value = (i.value + 1) % images.value.length, 4000);
 });
 onUnmounted(() => {
   if (intervalId) {

@@ -32,7 +32,7 @@ const remove = async (idToDelete) => {
   axios.delete(`http://localhost:8080/quiz/deleteQuestion?questionID=${idToDelete}`)
       .then(response => {
         if (response.status === 202) {
-          quizList.value = quizList.value.filter(q => q.ob !== idToDelete);
+          quizList.value = quizList.value.filter((q => q.id !== idToDelete));
         }
       })
       .catch(error => {
@@ -66,10 +66,10 @@ const addQuestion = async () => {
     }
   }
 }
-function isNotFilled(a, b, c, d, e, f) {
-  return a.length === 0 || b.length === 0 || c.length === 0 || d.length === 0 ||
-      e.length === 0 || f.length === 0;
-}
+
+const focusOption = (num) => document.getElementsByClassName("input-field")[num].focus();
+
+const isNotFilled = (...fields) => fields.some(f => f.length === 0);
 </script>
 
 <template>
@@ -130,13 +130,7 @@ function isNotFilled(a, b, c, d, e, f) {
 
 <script>
 export default {
-  name: 'AdminPanel',
-
-  methods: {
-    focusOption(num) {
-      document.getElementsByClassName("input-field")[num].focus();
-    }
-  }
+  name: 'AdminPanel'
 }
 </script>
 

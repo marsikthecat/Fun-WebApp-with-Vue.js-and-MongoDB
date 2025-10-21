@@ -1,160 +1,125 @@
 <script setup>
-import {ref} from "vue";
+import {reactive} from "vue";
+import axios from "axios";
+import {useRouter} from "vue-router";
+import {customPopup} from "../../assets/features.js";
 
-const signUpVisible = ref(false);
-const showRegistration = (b) => signUpVisible.value = b;
+const router = useRouter();
+
+const state = reactive({
+  user: { name: "", password: "" },
+  reg: { name: "", pass: "", confirm: "" },
+  loggedIn: false,
+  msg: { text: "", visible: false },
+  signup: { text: "", visible: false, modal: false },
+});
+
+const showMsg = (target, text, duration = 3000) => {
+  state[target].text = text;
+  state[target].visible = true;
+  setTimeout(() => (state[target].visible = false), duration);
+};
+
+const focusPassword = () => document.getElementById("p")?.focus();
+
+const login = async () => {
+  try {
+    const res = await axios.post(`http://localhost:8080/users/login`, {
+      name: state.user.name,
+      password: state.user.password
+    });
+    if (res.data === "admin-login") return router.push('/admin');  // Redirect to admin panel.
+    sessionStorage.setItem("token", res.data);
+    state.loggedIn = true;
+    setTimeout(() => router.push('/main/home'), 3000); // Redirect to Home after successful login.
+  } catch (error) {
+    const errorNotification = error.response?.status === 401 ? error.response.data : "Fatal error: Server is not working";
+    showMsg("msg", errorNotification);
+  }
+}
+
+const register = async () =>  {
+  const username = state.reg.name.trim();
+  const password = state.reg.pass.trim();
+  const password_confirmed = state.reg.pass.trim();
+  if (validateData(username, password, password_confirmed)) {
+    try {
+      const result = await axios.post(`http://localhost:8080/users/registering?`, { name: username, password: password});
+      const registrationMsg = result.data ? "Registration successful" : "You are already registered.";
+      showMsg("msg", registrationMsg, 5000);
+    } catch (e) {
+      customPopup("Fatal Error", "Registration failed: " + e, true );
+    }
+  }
+}
+
+const validateData = (username, password, password_confirmed) => {
+  const rules = [
+    { check: () => username.length === 0 || password.length === 0, message: "You need to fill in a username and a password!" },
+    { check: () => username.length < 5, message: "Your username needs at least 5 characters" },
+    { check: () => password.length < 10, message: "Your password needs at least 10 characters" },
+    { check: () => !/(?=(.*[A-Z]){3})/.test(password), message: "Your password needs at least 3 uppercase characters" },
+    { check: () => !/(?=(.*[a-z]){3})/.test(password), message: "Your password needs at least 3 lowercase characters" },
+    { check: () => !/(?=(.*\d){2})/.test(password), message: "Your password needs at least 3 numbers" },
+    { check: () => !/(?=.*[^A-Za-z0-9])/.test(password), message: "Your password needs at least one special character" },
+    { check: () => password !== password_confirmed, message: "Password and repeated Password are not equal!"}
+  ];
+  for (let rule of rules) {
+    if (rule.check()) {
+      showMsg("signup", rule.message);
+      return false;
+    }
+  }
+  return true;
+}
 </script>
+
 <template>
   <div id="global">
-    <div id="signUpBar" v-if="!loggedIn"><p> Are you new?</p><button @click="showRegistration(true)">Sign up</button></div>
-    <div v-if="!loggedIn" id="container">
+    <div id="signUpBar"><p> Are you new?</p>
+      <button @click="state.signup.modal = true">Sign up</button>
+    </div>
+    <div v-if="!state.loggedIn" id="container">
       <h2>Are you ready for Marsik?</h2>
       <p><b>Name: </b></p>
-      <input v-model="user_name" type="text" autofocus placeholder="your name" @keydown.enter="focusPassword()"/>
+      <input v-model="state.user.name" type="text" autofocus placeholder="your name" @keydown.enter="focusPassword()"/>
       <p><b> Password: </b></p>
-      <input v-model="user_password" type="password" id="p" autocomplete="off" placeholder="your password" @keydown.enter="login"/>
+      <input v-model="state.user.password" type="password" id="p" autocomplete="off" placeholder="your password" @keydown.enter="login"/>
       <button @click="login()">login</button>
       <transition name="fade">
-        <p v-if="msgVisible"> {{confirmation}} </p>
+        <p v-if="state.msg.visible"> {{state.msg.text}} </p>
       </transition>
     </div>
 
-    <div class="modal" v-if="signUpVisible">
-      <span @click="showRegistration(false)" class="close" title="Close Modal">&times;</span>
-      <div class="modal-content" v-if="signUpVisible">
+    <div class="modal" v-if="state.signup.modal">
+      <span @click="state.signup.modal = false" class="close" title="Close Modal">&times;</span>
+      <div class="modal-content" v-if="state.signup.modal">
         <div class="container">
           <h2>Sign Up</h2>
           <p>Please fill in this form to create an account.</p>
           <hr>
           <p><b>Name:</b></p>
-          <input v-model="user_name_registration" type="text" autocomplete="off" placeholder="Enter your name">
+          <input v-model="state.reg.name" type="text" autocomplete="off" placeholder="Enter your name">
           <p><b>Password:</b></p>
-          <input v-model="user_password_registration" type="password" autocomplete="off" placeholder="Enter your Password">
+          <input v-model="state.reg.pass" type="password" autocomplete="off" placeholder="Enter your Password">
           <p><b>Repeat Password:</b></p>
-          <input v-model="user_password_registration_confirmed" type="password" placeholder="Repeat Password">
-          <p>By creating an account you allow Marsik the Cat to fart on you.</p>
+          <input v-model="state.reg.confirm" type="password" placeholder="Repeat Password">
+          <p>By creating an account you allow Marsik the Cat to be a fur ball</p>
           <div>
-            <button @click="showRegistration(false)" class="cancelBtn">Cancel</button>
+            <button @click="state.signup.modal = false" class="cancelBtn">Cancel</button>
             <button class="signup" @click="register()">Sign Up</button>
           </div>
           <transition name="fade">
-          <p v-if="signupMsgVisible"> {{signupMessage}} </p>
+          <p v-if="state.signup.visible"> {{state.signup.text}} </p>
         </transition>
         </div>
       </div>
     </div>
-  <div v-if="loggedIn">
-    <h1> Welcome {{user_name}}</h1>
+  <div v-if="state.loggedIn">
+    <h1> Welcome {{state.user.name}}</h1>
   </div>
   </div>
 </template>
-
-<script>
-import axios from 'axios';
-import App from "../App.vue";
-import {customPopup} from "../../assets/features.js";
-
-export default {
-  name: 'Login',
-  components: {App},
-  data() {
-    return {
-      user_name: "",
-      user_password: "",
-      confirmation: "",
-      loggedIn: false,
-      msgVisible: false,
-      user_name_registration: "",
-      user_password_registration: "",
-      user_password_registration_confirmed: "",
-      signupMessage: "",
-      signupMsgVisible: false,
-    };
-  },
-  methods: {
-    focusPassword() {
-      document.getElementById("p").focus();
-    },
-    async login() {
-      try {
-        const response = await axios.post(`http://localhost:8080/users/login`, {
-              name: this.user_name,
-              password: this.user_password
-        });
-        if (response.data === "admin-login") {
-          this.$router.push('/admin');  // Weiterleitung zum Admin Panel
-        }
-        else {
-          sessionStorage.setItem("token", response.data);
-          this.loggedIn = true;
-          setTimeout(() => {
-            this.$router.push('/main/home');  // Weiterleitung zu /home nach erfolgreichem Login
-          }, 3000);
-        }
-      } catch (error) {
-        if (error.response) {
-          this.notifyUser("Login failed: Please check your data or sign in!", true);
-        } else {
-          this.notifyUser("Fatal error: Server is not working", true);
-        }
-      }
-    },
-    async register() {
-      const username = this.user_name_registration.trim();
-      const password = this.user_password_registration.trim()
-      const password_confirmed = this.user_password_registration_confirmed.trim();
-      const validation = this.validateData(username, password, password_confirmed);
-      if (validation) {
-        try {
-          const result = await axios.post(`http://localhost:8080/users/registering?`,
-              { name: username, password: password});
-          if (result.data) {
-            this.notifyUser("Registration successful", false);
-          } else {
-            this.notifyUser("You are already registered.", false);
-          }
-        } catch (e) {
-          customPopup("Fatal Error", "Registration failed:" + e, true );
-        }
-      }
-    },
-    notifyUser(message, login) {
-      if (login) {
-        this.msgVisible = true
-        this.confirmation = message;
-        setTimeout(() => {
-          this.msgVisible = false;
-        }, 3000)
-      } else {
-        this.signupMsgVisible = true
-        this.signupMessage = message;
-        setTimeout(() => {
-          this.signupMsgVisible = false;
-        }, 5000)
-      }
-    },
-    validateData(username, password, password_confirmed) {
-      const rules = [
-        { check: () => username.length === 0 || password.length === 0, message: "You need to fill in a username and a password!" },
-        { check: () => username.length < 5, message: "Your username needs at least 5 characters" },
-        { check: () => password.length < 10, message: "Your password needs at least 10 characters" },
-        { check: () => !/(?=(.*[A-Z]){3})/.test(password), message: "Your password needs at least 3 uppercase characters" },
-        { check: () => !/(?=(.*[a-z]){3})/.test(password), message: "Your password needs at least 3 lowercase characters" },
-        { check: () => !/(?=(.*\d){2})/.test(password), message: "Your password needs at least 3 numbers" },
-        { check: () => !/(?=.*[^A-Za-z0-9])/.test(password), message: "Your password needs at least one special character" },
-        { check: () => password !== password_confirmed, message: "Password and repeated Password are not equal!"}
-      ];
-      for (let rule of rules) {
-        if (rule.check()) {
-          this.notifyUser(rule.message, false);
-          return false;
-        }
-      }
-      return true;
-    }
-  }
-};
-</script>
 
 <style scoped>
 #global
@@ -205,8 +170,8 @@ export default {
 #container input
 {
   display: block;
-  margin: 0.7em auto;
-  padding: 0.4em;
+  margin: 0.5em auto;
+  padding: 0.5em;
   font-size: 1em;
   border: 2px solid #ccc;
   border-radius: 10px;
@@ -218,12 +183,11 @@ export default {
 }
 #container button
 {
-  margin: 10px;
-  padding: 8px 0 8px 0;
+  margin: 20px 10px 10px 10px;
+  padding: 8px 40px 8px 40px;
   background: blue;
-  width: 140px;
   color: white;
-  font-size: 1.2em;
+  font-size: 1.25em;
   border-radius: 8px;
 }
 #container button:hover
@@ -248,7 +212,6 @@ export default {
   top: 0;
   width: 100%;
   height: 100%;
-  overflow: auto;
   background-color: #474e5d;
   padding-top: 50px;
 }

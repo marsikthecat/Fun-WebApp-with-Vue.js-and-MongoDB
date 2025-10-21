@@ -1,9 +1,8 @@
 <script setup>
  import {ref} from "vue";
 
- const sectionContents = ["Introduction", "Use of the Website", "Login",
-   "Main conditions", "Copyright", "What we expect from you", "Interaction with Marsik",
-   "Technical framework conditions"];
+ const sectionContents = ["Introduction", "Use of the Website", "Login", "Main conditions",
+   "Copyright", "What we expect from you", "Interaction with Marsik", "Technical framework conditions"];
  const superPopupShown = ref(false);
  const title = ref('');
  const mainText = ref('');
@@ -108,7 +107,6 @@ export default {
 h1
 {
   color: #1f1f1f;
-  padding: 20px;
 }
 
 p
@@ -126,7 +124,7 @@ p
 }
 .collapsible:hover
 {
-  background-color: #3f3f3f;
+  background-color: #444444;
 }
 
 #overLay
@@ -150,9 +148,8 @@ p
   top: 50%;
   transform: translate(-50%, -50%);
   background-color: #dfdfdf;
-  height: fit-content;
   text-align: center;
-  transition: 1s ease-in-out;
+  transition: 0.4s ease-in-out;
   transition-property: opacity, visibility;
   opacity: 0;
 }
