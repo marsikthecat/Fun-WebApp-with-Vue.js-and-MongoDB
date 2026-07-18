@@ -1,35 +1,36 @@
 package org.example.backend;
 
-import java.util.HashMap;
-import java.util.Random;
+import java.security.SecureRandom;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 public class TokenManager {
 
-  private static final String LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  private static final String LETTERSUPPERCASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  private static final String LETTERSLOWERCASE = "abcdefghijklmnopqrstuvwxyz";
   private static final String NUMBERS = "1234567890";
-  private static final Random random = new Random();
-  private static final HashMap<Integer, String> tokenSet = new HashMap<>();
+  private static final SecureRandom random = new SecureRandom();
+  private static final Set<String> tokens = Collections.synchronizedSet(new HashSet<>());
 
   private TokenManager() {}
 
-  public static String createToken(int len) {
-    String all = LETTERS.concat(NUMBERS);
+  public static String setToken(int len) {
+    String all = LETTERSUPPERCASE.concat(NUMBERS).concat(LETTERSLOWERCASE);
     StringBuilder str = new StringBuilder();
     for (int i = 0; i < len; i++) {
       str.append(all.charAt(random.nextInt(all.length())));
     }
-    return str.toString();
+    String token = str.toString();
+    tokens.add(token);
+    return token;
   }
 
-  public static void addToken(String string, int userId) {
-    tokenSet.put(userId, string);
+  public static String destroyToken(String token) {
+    return tokens.remove(token) ? token : null;
   }
 
-  public static String removeToken(int userId) {
-    return tokenSet.remove(userId);
-  }
-
-  public static boolean exists(int userId) {
-    return tokenSet.get(userId) != null;
+  public static boolean exists(String token) {
+    return tokens.contains(token);
   }
 }

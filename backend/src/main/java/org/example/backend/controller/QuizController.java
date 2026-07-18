@@ -1,10 +1,8 @@
 package org.example.backend.controller;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import org.example.backend.model.QuizQuestion;
-import org.example.backend.repository.QuizRepository;
+import org.example.backend.service.QuizService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -21,16 +19,15 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "http://localhost:5173")
 public class QuizController {
 
-  private final QuizRepository quizRepository;
+  private final QuizService quizService;
 
-  public QuizController(QuizRepository quizRepository) {
-    this.quizRepository = quizRepository;
+  public QuizController(QuizService quizService) {
+    this.quizService = quizService;
   }
 
   @GetMapping
   public ResponseEntity<?> getAllQuestions() {
-    List<QuizQuestion> questionList = quizRepository.findAll();
-    Collections.shuffle(questionList);
+    List<QuizQuestion> questionList = quizService.getAllQuestions();
     return ResponseEntity.status(HttpStatus.OK).body(questionList);
   }
 
@@ -39,28 +36,22 @@ public class QuizController {
                                          @RequestParam int correctIndex,
                                          @RequestBody List<String> options) {
     if (correctIndex < 0 || correctIndex > 3) {
-      return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(
-              "Index have to be between 0 and 3");
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Correct index out of bounds");
     } else if (options.size() != 4) {
-      return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("You need to have 4 options");
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Wrong number of options");
     } else if (question.trim().isEmpty()) {
-      return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Question cannot be empty");
-    } else {
-      QuizQuestion quizQuestion = new QuizQuestion(question, options, correctIndex);
-      quizRepository.save(quizQuestion);
-      return ResponseEntity.status(HttpStatus.OK).body(quizQuestion);
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Question is empty");
     }
+    QuizQuestion newQuestion = quizService.storeQuestion(question, correctIndex, options);
+    return ResponseEntity.status(HttpStatus.OK).body(newQuestion);
   }
 
   @DeleteMapping("/deleteQuestion")
   public ResponseEntity<?> deleteQuestion(@RequestParam String questionID) {
-    Optional<QuizQuestion> question = quizRepository.findById(questionID);
-    if (question.isPresent()) {
-      quizRepository.delete(question.get());
-      return ResponseEntity.status(HttpStatus.ACCEPTED).body("Question successfully deleted");
-    } else {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-              "Question with id: " + questionID + "not found");
+    QuizQuestion question = quizService.deleteQuestion(questionID);
+    if (question == null) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Question with id: " + questionID + " not found");
     }
+    return ResponseEntity.status(HttpStatus.OK).body(question);
   }
 }

@@ -2,29 +2,47 @@
 import {onMounted, ref} from "vue";
 import axios from "axios";
 import {customPopup} from "../../assets/features.js";
+import router from "../router/router.js";
 
-const todos = ref([]);
+const users = ref([]);
 const messagesList = ref([]);
 const quizList = ref([]);
 
-onMounted(async function() {
-  try {
-    const userList = await fetch("http://localhost:8080/users");
-    todos.value = await userList.json();
-  } catch (e) {
-    customPopup("Something went wrong:", e.toString(), true);
+onMounted(async () => {
+
+  const token = sessionStorage.getItem("admin-token");
+  if (token === null) {
+    await router.push("/unauthorised");
+    return;
   }
   try {
-    const messageList = await fetch("http://localhost:8080/message");
-    messagesList.value = await messageList.json();
+    const result = await axios.post(
+        "http://localhost:8080/users/checkUser", {},
+        {
+          headers: {
+            Authorization: token
+          }
+        }
+    );
+    if (result.status === 403) {
+      await router.push("/unauthorised");
+    }
   } catch (e) {
-    customPopup("Something went wrong:", e.toString(), true);
+    customPopup("Big Fatal Error:", e, true);
+    await router.push("/unauthorised");
   }
+
   try {
-    const quizListRequest = await fetch("http://localhost:8080/quiz")
-    quizList.value = await quizListRequest.json();
-  } catch (e) {
-    customPopup("Something went wrong:", e.toString(), true);
+    const [userFetch, messagesFetch, quizListFetch] = await Promise.all([
+      axios.get("http://localhost:8080/users",  { headers: {Authorization: token} }),
+      axios.get("http://localhost:8080/message"), // TODO: auth for this point
+      axios.get("http://localhost:8080/quiz"),
+    ])
+    users.value = userFetch.data;
+    messagesList.value =  messagesFetch.data;
+    quizList.value = await quizListFetch.data;
+  } catch (error) {
+    customPopup("Something went wrong: ", error.toString(), true);
   }
 })
 
@@ -78,13 +96,24 @@ const isNotFilled = (...fields) => fields.some(f => f.length === 0);
     <div id="dashboard">
       <div class="section">
         <h2 class="section-title">All signed up users: </h2>
-        <div class="list">
-          <p v-for="(user, index) in todos" :key="index" class="list-item">
-            <span class="label">Name:</span> {{ user.name }}
-            <br />
-            <span class="label">Password:</span> {{ user.password }}
-          </p>
-        </div>
+        <v-table density="compact" hover>
+          <thead>
+          <tr style="font-size: large">
+            <th class="text-left, label">
+              Name
+            </th>
+            <th class="text-left, label">
+              Password
+            </th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr v-for="user in users" :key="user.id">
+            <td> {{ user.name }}</td>
+            <td> {{ user.password }}</td>
+          </tr>
+          </tbody>
+        </v-table>
       </div>
       <div class="section">
         <h2 class="section-title">All messages: </h2>
@@ -102,6 +131,11 @@ const isNotFilled = (...fields) => fields.some(f => f.length === 0);
       </div>
       <div class="section">
         <h2 class="section-title"> Quiz App Management</h2>
+
+
+        <v-data-table :items="quizList" sort-field="id">
+        </v-data-table>
+
         <div class="list">
           <p v-for="q in quizList" class="list-item">
             <span class="label"> Question id: {{q.id}} <br>

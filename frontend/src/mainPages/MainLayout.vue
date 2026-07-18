@@ -13,14 +13,21 @@ onMounted(() => {
 const {y} = useWindowScroll();
 const router = useRouter();
 async function check() {
-  const id = sessionStorage.getItem("token");
-  if (id === null) {
+  const token = sessionStorage.getItem("token");
+  if (token === null) {
     await router.push("/unauthorised");
     return;
   }
   try {
-    const result = await axios.get(`http://localhost:8080/users/checkUser?userId=${id}`);
-    if (!result.data) {
+    const result = await axios.post(
+        "http://localhost:8080/users/checkUser", {},
+        {
+          headers: {
+            Authorization: token
+          }
+        }
+    );
+    if (result.status === 403) {
       await router.push("/unauthorised");
     }
   } catch (e) {
@@ -29,23 +36,27 @@ async function check() {
   }
 }
 async function logout() {
-  const id = sessionStorage.getItem("token");
-  if (id === null) {
-    customPopup("Big Fatal Error: ", "Logout-token not found", true);
+  const token = sessionStorage.getItem("token");
+  if (token === null) {
+    customPopup("Big Fatal Error: ", "Session token not found", true);
     return;
   }
   try {
-    const result = await axios.get(`http://localhost:8080/users/logout?userId=${id}`);
-    if (result.data) {
+    const result = await axios.post(`http://localhost:8080/users/logout`, {},
+        {
+      headers: {
+        Authorization: token
+      }
+    });
+    if (result.status === 200) {
       sessionStorage.removeItem("token");
-      customPopup("Logout successful!", "Marsik wants to say something to you: " +
-          "See you later!", false);
+      customPopup("Logout successful!", "Marsik wants to say something to you: " + "See you later!", false);
       await router.push("/login");
     } else {
       customPopup("Error: ", "Logout-token not valid", true);
     }
   } catch (e) {
-    customPopup("Fatal Error:", e, true);
+    customPopup("Fatal Error: ", e, true);
   }
 }
 </script>

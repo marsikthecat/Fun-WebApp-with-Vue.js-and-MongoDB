@@ -3,6 +3,17 @@ import {reactive} from "vue";
 import axios from "axios";
 import {useRouter} from "vue-router";
 import {customPopup} from "../../assets/features.js";
+import { ref } from "vue";
+
+const snackBars = ref();
+const errors = ref([]);
+
+function addMessage(message, mode = "fail") {
+  const color = mode === "success" ? "green" : "red";
+  errors.value.push({
+    text: message, color
+  });
+}
 
 const router = useRouter();
 
@@ -23,17 +34,34 @@ const showMsg = (target, text, duration = 3000) => {
 const focusPassword = () => document.getElementById("p")?.focus();
 
 const login = async () => {
+  // Only for entering admin-panel easier for development!
+  if (state.user.name === "admin-marsik") {
+    try {
+      const res = await axios.post("http://localhost:8080/users/admin-login", {
+        name: state.user.name,
+        password: state.user.password,
+      })
+      if (res.status === 200) {
+        sessionStorage.setItem("admin-token", res.data);
+        await router.push("/admin")
+      }
+    } catch (err) {
+      showMsg("msg", "Admin Login failed ");
+    }
+    return;
+  }
   try {
     const res = await axios.post(`http://localhost:8080/users/login`, {
       name: state.user.name,
       password: state.user.password
     });
-    if (res.data === "admin-login") return router.push('/admin');  // Redirect to admin panel.
     sessionStorage.setItem("token", res.data);
     state.loggedIn = true;
     setTimeout(() => router.push('/main/home'), 3000); // Redirect to Home after successful login.
   } catch (error) {
     const errorNotification = error.response?.status === 401 ? error.response.data : "Fatal error: Server is not working";
+    addMessage("Login failed: " + error.message, "error");
+    console.log(error.message)
     showMsg("msg", errorNotification);
   }
 }
@@ -41,12 +69,12 @@ const login = async () => {
 const register = async () =>  {
   const username = state.reg.name.trim();
   const password = state.reg.pass.trim();
-  const password_confirmed = state.reg.pass.trim();
+  const password_confirmed = state.reg.confirm.trim();
   if (validateData(username, password, password_confirmed)) {
     try {
       const result = await axios.post(`http://localhost:8080/users/registering?`, { name: username, password: password});
       const registrationMsg = result.data ? "Registration successful" : "You are already registered.";
-      showMsg("msg", registrationMsg, 5000);
+      showMsg("signup", registrationMsg, 5000);
     } catch (e) {
       customPopup("Fatal Error", "Registration failed: " + e, true );
     }
@@ -119,6 +147,14 @@ const validateData = (username, password, password_confirmed) => {
     <h1> Welcome {{state.user.name}}</h1>
   </div>
   </div>
+  <v-snackbar-queue
+      ref="snackBars"
+      v-model="errors"
+      :total-visible="5"
+      closable
+      location="bottom right"
+      timeout="5000"
+  ></v-snackbar-queue>
 </template>
 
 <style scoped>
