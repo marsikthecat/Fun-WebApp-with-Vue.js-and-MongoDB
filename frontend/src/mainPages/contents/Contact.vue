@@ -3,6 +3,13 @@
       <section>
         <h2> Contact with Marsik</h2>
         <p> You can get in touch with Marsik here: </p><br>
+        <v-form>
+          <v-container style="">
+            <v-text-field label="Your name" required></v-text-field>
+            <v-date-input label="Your age" required multiple></v-date-input>
+            <v-textarea label="Your message" required counter clearable></v-textarea>
+          </v-container>
+        </v-form>
         <div id="kontaktformular">
           <b> Name: </b>
           <input id="kontaktname" name="userName" type="text" placeholder="Your Name"/>

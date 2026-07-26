@@ -1,5 +1,5 @@
 <script setup>
-import {onMounted, ref} from "vue";
+import {onMounted, ref, shallowRef} from "vue";
 import axios from "axios";
 import {customPopup} from "../../assets/features.js";
 import router from "../router/router.js";
@@ -7,6 +7,15 @@ import router from "../router/router.js";
 const users = ref([]);
 const messagesList = ref([]);
 const quizList = ref([]);
+
+const headers = [
+  {title: 'Question', key: 'question', align: 'start'},
+  {title: 'Options', key: 'options', align: 'start'},
+  {title: 'CorrectIndex', key: 'correctIndex', align: 'start'},
+  {title: 'Actions', key: 'actions', align: 'end'},
+];
+
+const addQuestionDialog = ref(false);
 
 onMounted(async () => {
 
@@ -131,9 +140,20 @@ const isNotFilled = (...fields) => fields.some(f => f.length === 0);
       </div>
       <div class="section">
         <h2 class="section-title"> Quiz App Management</h2>
-
-
-        <v-data-table :items="quizList" sort-field="id">
+        <v-data-table :headers="headers" :items="quizList" hide-default-footer>
+          <template v-slot:top>
+            <v-toolbar flat color="red">
+              <v-toolbar-title>Quiz App Management</v-toolbar-title>
+              <v-btn class="me-2" prepend-icon="mdi-plus" rounded="lg" text="New Question" border @click="addQuestionDialog = true">
+              </v-btn>
+            </v-toolbar>
+          </template>
+          <template #item.actions="{ item }">
+            <div class="d-flex ga-2 justify-end">
+              <v-icon icon="mdi-pencil" color="medium-emphasis" size="small"></v-icon>
+              <v-icon icon="mdi-delete" color="medium-emphasis" size="small"></v-icon>
+            </div>
+          </template>
         </v-data-table>
 
         <div class="list">
@@ -146,6 +166,19 @@ const isNotFilled = (...fields) => fields.some(f => f.length === 0);
             <button id="${{q.id}}" class="delete-btn" @click="remove(q.id)">Delete Question {{q.id}}</button>
           </p>
         </div>
+
+        <v-dialog max-width="500" v-show="addQuestionDialog">
+          <v-card>Add new Question</v-card>
+          <v-row>
+            <v-col>
+              <v-text-field>
+
+              </v-text-field>
+            </v-col>
+          </v-row>
+        </v-dialog>
+
+
         <h4>Add new question:</h4>
         <input type="text" id="questionText" class="input-field" placeholder="Enter question" @keydown.enter="focusOption(1)">
         <p>Add 4 options</p>

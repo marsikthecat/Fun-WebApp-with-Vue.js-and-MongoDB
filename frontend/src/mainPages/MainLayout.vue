@@ -19,8 +19,7 @@ async function check() {
     return;
   }
   try {
-    const result = await axios.post(
-        "http://localhost:8080/users/checkUser", {},
+    const result = await axios.post("http://localhost:8080/users/checkUser", {},
         {
           headers: {
             Authorization: token

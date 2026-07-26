@@ -1,5 +1,5 @@
 <script setup>
-import {onMounted, onUnmounted, ref, watchEffect} from "vue";
+import {onMounted, onUnmounted, ref, shallowRef, toRef, watchEffect} from "vue";
 const images = ref([
   "/graphicComponents/pictures/20150814_120245.jpg",
   "/graphicComponents/pictures/20150828_120900.jpg",
@@ -35,6 +35,29 @@ const urlSuperGallery = [
 ];
 const front = () => index.value = (index.value + 1) % urlSuperGallery.length;
 const back = () => index.value = index.value !== 0 ? (index.value - 1) : urlSuperGallery.length - 1;
+
+
+const gallery = [
+  {
+    src: "/graphicComponents/pictures/supergalerie1.jpg",
+    label: "Marsik is a night-cat"
+  },
+  {
+    src: "/graphicComponents/pictures/supergalerie2.jpg",
+    label: "Marsik the hidden fir tree kitten"
+  },
+  {
+    src: "/graphicComponents/pictures/supergalerie3.jpg",
+    label: "Marsik lies like a corpse"
+  },
+  {
+    src: "/graphicComponents/pictures/supergalerie4.jpg",
+    label: "Marsik wants to poop"
+  }
+]
+
+const currentIndex = shallowRef(0);
+const currentItem = toRef(() => gallery[currentIndex]);
 </script>
 
 <template>
@@ -87,11 +110,23 @@ const back = () => index.value = index.value !== 0 ? (index.value - 1) : urlSupe
        <br>
       <section>
         <h2>Impressions from Marsik's daily routine</h2>
-          <img :src="urlSuperGallery[index]" id="superGallery" alt="">
-          <div id="galleryBtnBar">
-            <button @click="back" id="galleryBtnBack"><i class="fa fa-arrow-left"></i></button>
-            <button @click="front" id="galleryBtnFront"><i class="fa fa-arrow-right"></i></button>
-          </div>
+        <v-carousel v-model="currentIndex" hide-delimiter-background height="auto">
+          <template v-slot:prev="{ props }">
+            <v-btn id="galleryBtnBack" @click="props.onClick"><i class="fa fa-arrow-left"></i></v-btn>
+          </template>
+          <template v-slot:next="{ props }">
+            <v-btn id="galleryBtnFront" @click="props.onClick"><i class="fa fa-arrow-right"></i></v-btn>
+          </template>
+          <v-carousel-item v-for="(item, index) in gallery" :key="index" :src="item.src" cover :alt="item.label">
+            <v-overlay :scrim="false" content-class="w-100 h-100 d-flex flex-column align-center justify-space-between pointerpass-through py-3"
+            contained model-value no-click-animation persistent>
+              <v-sheet :key="currentIndex" color="#222222" rounded="pill">
+                <v-list-item :title="item.label" base-color="white" >
+                </v-list-item>
+              </v-sheet>
+            </v-overlay>
+          </v-carousel-item>
+        </v-carousel>
       </section>
     </article>
 </template>
@@ -127,16 +162,20 @@ th,td
 }
 #galleryBtnBack, #galleryBtnFront
 {
-  border-radius: 16px;
-  width: 2em;
-  font-size: 2.5em;
-  background: burlywood;
-  margin: 0.5em 0.3em 0 0.3em;
-  box-shadow: 4px 4px 10px -5px;
+  height: 50px;
+  min-width: 20px;
+  font-size: 1.3em;
+  width: 20px;
+  color: white;
+  background: #5a5a5a;
+  margin-left: -15px;
+}
+#galleryBtnFront {
+  margin-right: -15px;
 }
 #galleryBtnBack:hover, #galleryBtnFront:hover
 {
-  background: #d59f5b;
+  background: #6a6a6a;
 }
 #galleryBtnBack i, #galleryBtnFront i
 {
