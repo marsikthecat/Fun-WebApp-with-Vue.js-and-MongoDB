@@ -1,12 +1,20 @@
 <script setup>
-import {onMounted, ref, shallowRef} from "vue";
+import {onMounted, ref} from "vue";
 import axios from "axios";
-import {customPopup} from "../../assets/features.js";
 import router from "../router/router.js";
+import SnackBar from "../../assets/globalFeatures/SnackBar.vue";
+
+const snackBar = ref();
 
 const users = ref([]);
 const messagesList = ref([]);
 const quizList = ref([]);
+const questionForm = ref({
+  question: "",
+  options: ["", "", "", ""],
+  correctIndex: 0,
+});
+const questionToDelete = ref(null);
 
 const headers = [
   {title: 'Question', key: 'question', align: 'start'},
@@ -16,9 +24,9 @@ const headers = [
 ];
 
 const addQuestionDialog = ref(false);
+const deleteQuestionDialog = ref(false);
 
 onMounted(async () => {
-
   const token = sessionStorage.getItem("admin-token");
   if (token === null) {
     await router.push("/unauthorised");
@@ -37,7 +45,7 @@ onMounted(async () => {
       await router.push("/unauthorised");
     }
   } catch (e) {
-    customPopup("Big Fatal Error:", e, true);
+    snackBar.value.pushSnackBar("Big Fatal Error:" + e, "error");
     await router.push("/unauthorised");
   }
 
@@ -48,94 +56,121 @@ onMounted(async () => {
       axios.get("http://localhost:8080/quiz"),
     ])
     users.value = userFetch.data;
-    messagesList.value =  messagesFetch.data;
+    messagesList.value = messagesFetch.data;
     quizList.value = await quizListFetch.data;
   } catch (error) {
-    customPopup("Something went wrong: ", error.toString(), true);
+    snackBar.value.pushSnackBar("Something went wrong: " + error.toString(), "error");
   }
 })
 
+const openDeleteDialog = (question) => {
+  questionToDelete.value = question;
+  deleteQuestionDialog.value = true;
+}
+
 const remove = async (idToDelete) => {
-  axios.delete(`http://localhost:8080/quiz/deleteQuestion?questionID=${idToDelete}`)
+  return axios.delete(`http://localhost:8080/quiz/deleteQuestion?questionID=${idToDelete}`)
       .then(response => {
-        if (response.status === 202) {
+        if (response.status === 200) {
           quizList.value = quizList.value.filter((q => q.id !== idToDelete));
         }
       })
       .catch(error => {
         if (error.response && error.response.status === 404) {
-          customPopup("Oh no, something went wrong ", error.response.data, true);
+          snackBar.value.pushSnackBar("Oh no, something went wrong " + error.response.data, "error");
         } else {
-          customPopup("Oh no, something went horribly wrong ", error, true);
+          snackBar.value.pushSnackBar("Oh no, something went horribly wrong " + error, "error");
         }
       });
 }
+const confirmRemove = async () => {
+  if (!questionToDelete.value) {
+    return;
+  }
+  await remove(questionToDelete.value.id);
+  questionToDelete.value = null;
+  deleteQuestionDialog.value = false;
+}
+
+const resetQuestionForm = () => {
+  questionForm.value = {
+    question: "",
+    options: ["", "", "", ""],
+    correctIndex: 0,
+  };
+}
+
 const addQuestion = async () => {
-  const questionText = document.getElementById("questionText").value;
-  const options = [
-    document.getElementById("option_one").value,
-    document.getElementById("option_two").value,
-    document.getElementById("option_three").value,
-    document.getElementById("option_four").value
-  ]
-  const correctIndex = document.getElementById("correctIndex").value;
+  const questionText = questionForm.value.question.trim();
+  const options = questionForm.value.options.map(option => option.trim());
+  const correctIndex = questionForm.value.correctIndex;
   if (isNotFilled(questionText, options[0], options[1], options[2],options[3], correctIndex)) {
-    customPopup("The following message appeared: ", "please fill in all fields", false);
+    snackBar.value.pushSnackBar("please fill in all fields", "error");
   } else {
-    const addQuestionRequest = await axios.post(`http://localhost:8080/quiz/store?question=${questionText}&correctIndex=${correctIndex}`, options);
+    const addQuestionRequest = await axios.post("http://localhost:8080/quiz/store", options, {
+      params: {
+        question: questionText,
+        correctIndex,
+      },
+    });
     if (addQuestionRequest.status === 200) {
       const newAddedQuestion = addQuestionRequest.data;
       quizList.value.push({id: newAddedQuestion.id, question: newAddedQuestion.question,
         options: newAddedQuestion.options,
         correctIndex: newAddedQuestion.correctIndex});
+      resetQuestionForm();
+      addQuestionDialog.value = false;
     } else {
-      customPopup("Something went wrong: ", addQuestionRequest.statusText, true);
+      snackBar.value.pushSnackBar("Something went wrong: " + addQuestionRequest.statusText, "error");
     }
   }
 }
 
 const focusOption = (num) => document.getElementsByClassName("input-field")[num].focus();
 
-const isNotFilled = (...fields) => fields.some(f => f.length === 0);
+const isNotFilled = (...fields) => fields.some(f => f === null || f === undefined || f.toString().length === 0);
 </script>
 
 <template>
+  <SnackBar ref="snackBar"></SnackBar>
   <div id="admin-dashboard">
     <h1 class="page-title">Welcome Admin</h1>
     <div id="dashboard">
-      <div class="section">
-        <h2 class="section-title">All signed up users: </h2>
-        <v-table density="compact" hover>
-          <thead>
-          <tr style="font-size: large">
-            <th class="text-left, label">
-              Name
-            </th>
-            <th class="text-left, label">
-              Password
-            </th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr v-for="user in users" :key="user.id">
-            <td> {{ user.name }}</td>
-            <td> {{ user.password }}</td>
-          </tr>
-          </tbody>
-        </v-table>
-      </div>
-      <div class="section">
-        <h2 class="section-title">All messages: </h2>
-        <div class="list">
-          <p v-for="(message, index) in messagesList" :key="index" class="list-item">
-            <span class="label">You got a new message from:</span> {{ message.kontaktname }}
-            <br>
-            <span class="label">Age:</span> {{ message.alter }}
-            <br>
-            <span class="label">He wrote the following to you:</span>
-            <br>
-            {{ message.kontaktnachricht }}
-          </p>
+      <div class="dashboard-row">
+        <div class="section">
+          <h2 class="section-title">All signed up users: </h2>
+          <v-table density="compact" hover>
+            <thead>
+            <tr style="font-size: large">
+              <th class="text-left, label">
+                Name
+              </th>
+              <th class="text-left, label">
+                Password
+              </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="user in users" :key="user.id">
+              <td> {{ user.name }}</td>
+              <td> {{ user.password }}</td>
+            </tr>
+            </tbody>
+          </v-table>
+        </div>
+        <div class="section">
+          <h2 class="section-title">All messages: </h2>
+          <div class="list">
+            <p v-for="(message, index) in messagesList" :key="index" class="list-item">
+              <span class="label">You got a new message from:</span> {{ message.kontaktname }}
+              <br>
+              <span class="label">Age:</span> {{ message.alter }}
+              <br>
+              <span class="label">He wrote the following to you:</span>
+              <br>
+              {{ message.kontaktnachricht }}
+            </p>
+          </div>
         </div>
       </div>
       <div class="section">
@@ -151,45 +186,62 @@ const isNotFilled = (...fields) => fields.some(f => f.length === 0);
           <template #item.actions="{ item }">
             <div class="d-flex ga-2 justify-end">
               <v-icon icon="mdi-pencil" color="medium-emphasis" size="small"></v-icon>
-              <v-icon icon="mdi-delete" color="medium-emphasis" size="small"></v-icon>
+              <v-icon icon="mdi-delete" color="medium-emphasis" size="small" @click="openDeleteDialog(item)"></v-icon>
             </div>
           </template>
         </v-data-table>
 
-        <div class="list">
-          <p v-for="q in quizList" class="list-item">
-            <span class="label"> Question id: {{q.id}} <br>
-             Question: {{q.question}} <br>
-             Options: {{q.options}} <br>
-             Correct: {{q.correctIndex}} <br>
-            </span>
-            <button id="${{q.id}}" class="delete-btn" @click="remove(q.id)">Delete Question {{q.id}}</button>
-          </p>
-        </div>
-
-        <v-dialog max-width="500" v-show="addQuestionDialog">
-          <v-card>Add new Question</v-card>
-          <v-row>
-            <v-col>
-              <v-text-field>
-
-              </v-text-field>
-            </v-col>
-          </v-row>
+        <v-dialog v-model="addQuestionDialog" max-width="560">
+          <v-card>
+            <v-card-title>Add new Question</v-card-title>
+            <v-card-text>
+              <v-text-field
+                  v-model="questionForm.question"
+                  label="Question"
+                  variant="outlined"
+                  autofocus
+              />
+              <v-text-field
+                  v-for="(_, optionIndex) in questionForm.options"
+                  :key="optionIndex"
+                  v-model="questionForm.options[optionIndex]"
+                  :label="`Option ${optionIndex + 1}`"
+                  variant="outlined"
+              />
+              <v-select
+                  v-model="questionForm.correctIndex"
+                  :items="[
+                      { title: 'Option 1', value: 0 },
+                      { title: 'Option 2', value: 1 },
+                      { title: 'Option 3', value: 2 },
+                      { title: 'Option 4', value: 3 },
+                  ]"
+                  label="Correct answer"
+                  variant="outlined"
+              />
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer />
+              <v-btn variant="text" @click="addQuestionDialog = false">Cancel</v-btn>
+              <v-btn color="primary" variant="flat" @click="addQuestion">Save</v-btn>
+            </v-card-actions>
+          </v-card>
         </v-dialog>
 
-
-        <h4>Add new question:</h4>
-        <input type="text" id="questionText" class="input-field" placeholder="Enter question" @keydown.enter="focusOption(1)">
-        <p>Add 4 options</p>
-        <input type="text" id="option_one" class="input-field" placeholder="Option 1" @keydown.enter="focusOption(2)">
-        <input type="text" id="option_two" class="input-field" placeholder="Option 2" @keydown.enter="focusOption(3)">
-        <input type="text" id="option_three" class="input-field" placeholder="Option 3" @keydown.enter="focusOption(4)">
-        <input type="text" id="option_four" class="input-field" placeholder="Option 4" @keydown.enter="addQuestion">
-        <select id="correctIndex" class="input-field" aria-orientation="horizontal" size="1">
-          <option v-for="n in 4" :key="n" :value="n - 1">{{n}}</option>
-        </select>
-        <button class="add-btn" @click="addQuestion">Add question</button>
+        <v-dialog v-model="deleteQuestionDialog" max-width="500">
+          <v-card>
+            <v-card-title>Are you sure?</v-card-title>
+            <v-card-text>
+              Are you sure that you want to delete this question?
+              <strong v-if="questionToDelete">{{ questionToDelete.question }}</strong>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer />
+              <v-btn variant="text" @click="deleteQuestionDialog = false">Cancel</v-btn>
+              <v-btn color="error" variant="flat" @click="confirmRemove">Delete</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </div>
     </div>
   </div>
@@ -220,8 +272,15 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  max-width: 900px;
+  max-width: 1200px;
   margin: 0 auto;
+}
+
+.dashboard-row
+{
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 20px;
 }
 
 .section
@@ -276,10 +335,14 @@ export default {
   width: 90%;
 }
 
-@media screen and (max-width: 444px) {
+@media screen and (max-width: 800px) {
   #admin-dashboard
   {
     padding: 0;
+  }
+  .dashboard-row
+  {
+    grid-template-columns: 1fr;
   }
 }
 </style>

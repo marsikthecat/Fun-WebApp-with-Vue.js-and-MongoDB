@@ -1,16 +1,7 @@
 import {ref} from "vue";
-import $ from "jquery";
 export const isPopupVisible = ref(false);
 export const handlePopup = (p) => {
     isPopupVisible.value = p;
-}
-export function setupMenuToggle() {
-    $(document).ready(() => {
-        $("nav").hide();
-        $("#menubar button").click(function () {
-            $("nav").slideToggle(700);
-        });
-    });
 }
 export function customPopup(title, content, isCritical) {
     let popup = document.createElement("div");

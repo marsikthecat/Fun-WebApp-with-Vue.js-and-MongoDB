@@ -1,5 +1,5 @@
 <script setup>
-import {onMounted, onUnmounted, ref, shallowRef, toRef, watchEffect} from "vue";
+import {onMounted, onUnmounted, ref, shallowRef, watchEffect} from "vue";
 const images = ref([
   "/graphicComponents/pictures/20150814_120245.jpg",
   "/graphicComponents/pictures/20150828_120900.jpg",
@@ -16,26 +16,13 @@ onMounted(() => {
   intervalId = setInterval(() => i.value = (i.value + 1) % images.value.length, 4000);
 });
 onUnmounted(() => {
-  if (intervalId) {
-    clearInterval(intervalId);
-  }
+  if (intervalId) clearInterval(intervalId);
 });
 watchEffect(() => {
   if (document.visibilityState === "hidden" && intervalId) {
     clearInterval(intervalId);
   }
 });
-
-const index = ref(0);
-const urlSuperGallery = [
-  "/graphicComponents/pictures/supergalerie1.jpg",
-  "/graphicComponents/pictures/supergalerie2.jpg",
-  "/graphicComponents/pictures/supergalerie3.jpg",
-  "/graphicComponents/pictures/supergalerie4.jpg",
-];
-const front = () => index.value = (index.value + 1) % urlSuperGallery.length;
-const back = () => index.value = index.value !== 0 ? (index.value - 1) : urlSuperGallery.length - 1;
-
 
 const gallery = [
   {
@@ -53,17 +40,19 @@ const gallery = [
   {
     src: "/graphicComponents/pictures/supergalerie4.jpg",
     label: "Marsik wants to poop"
+  },
+  {
+    src: "/graphicComponents/pictures/supergalerie5.jpg",
+    label: "Marsik wants something from you"
   }
 ]
-
 const currentIndex = shallowRef(0);
-const currentItem = toRef(() => gallery[currentIndex]);
 </script>
 
 <template>
     <article>
       <section>
-        <h2> Marsik´s life </h2>
+        <h2>Impressions from Marsik´s life </h2>
         <p> Marsik has an exciting daily routine. You can get an insight into Marsik's everyday life by looking at the pictures below. </p> <br>
         <img :src="images[i]" id="slideImage" alt="Slideshow Image">
       </section>
@@ -156,10 +145,6 @@ th,td
 {
   background-color: #e1ff1b;
 }
-#galleryBtnBar
-{
-  text-align: center;
-}
 #galleryBtnBack, #galleryBtnFront
 {
   height: 50px;
@@ -170,7 +155,8 @@ th,td
   background: #5a5a5a;
   margin-left: -15px;
 }
-#galleryBtnFront {
+#galleryBtnFront
+{
   margin-right: -15px;
 }
 #galleryBtnBack:hover, #galleryBtnFront:hover

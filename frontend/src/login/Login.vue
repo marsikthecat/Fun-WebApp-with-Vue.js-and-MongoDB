@@ -18,6 +18,11 @@ const furBallAccepted = ref(false);
 
 const modelVisible = ref(false);
 
+const passwordHidden = ref(true);
+
+const signInpasswordHidden = ref(true);
+const signInpasswordConfirmedHidden = ref(true);
+
 const login = async () => {
   // Only for entering admin-panel easier for development!
   if (userNameInput.value === "admin-marsik") {
@@ -109,7 +114,9 @@ const passwordInputRules = [
       <h2>Are you ready for Marsik?</h2>
         <v-form>
           <v-text-field v-model="userNameInput" label="Your Name" autocomplete="username"></v-text-field>
-          <v-text-field v-model="passwordInput" label="Your Password" autocomplete="current-password"></v-text-field>
+          <v-text-field :append-inner-icon="passwordHidden ? 'mdi-eye-off' : 'mdi-eye' " :type="passwordHidden ? 'password' : 'text' "
+                        v-model="passwordInput" label="Your Password" autocomplete="current-password"
+                        @click:append-inner="passwordHidden = !passwordHidden"></v-text-field>
           <v-btn @click="login()" text="Login"></v-btn>
         </v-form>
         <v-card-text class="text-center">
@@ -127,9 +134,15 @@ const passwordInputRules = [
           <v-sheet>
             <v-form @submit.prevent validate-on="submit lazy">
               <v-text-field :rules="userNameInputRules" v-model="newUserNameInput" label="Enter your name"></v-text-field>
-              <v-text-field :rules="passwordInputRules" v-model="newPasswordInput" label="Enter your Password"></v-text-field>
-              <v-text-field v-model="newPasswordInputConfirmed" label="Repeat your Password"></v-text-field>
-              <v-checkbox v-model="furBallAccepted" label="By creating an account you allow Marsik the Cat to be a fur ball"></v-checkbox>
+              <v-text-field :rules="passwordInputRules" v-model="newPasswordInput" label="Enter your Password"
+                            :append-inner-icon="signInpasswordHidden ? 'mdi-eye-off' : 'mdi-eye' "
+                            :type="signInpasswordHidden ? 'password' : 'text' "
+                            @click:append-inner="signInpasswordHidden = !signInpasswordHidden"></v-text-field>
+              <v-text-field v-model="newPasswordInputConfirmed" label="Repeat your Password"
+                            :append-inner-icon="signInpasswordConfirmedHidden ? 'mdi-eye-off' : 'mdi-eye' "
+                            :type="signInpasswordConfirmedHidden ? 'password' : 'text' "
+                            @click:append-inner="signInpasswordConfirmedHidden = !signInpasswordConfirmedHidden"></v-text-field>
+              <v-checkbox color="primary" v-model="furBallAccepted" label="By creating an account you allow Marsik the Cat to be a fur ball"></v-checkbox>
               <v-btn text="Sign up" type="submit" class="mb-3"></v-btn>
             </v-form>
           </v-sheet>
@@ -149,7 +162,7 @@ const passwordInputRules = [
 #container
 {
   background-color: #fff;
-  padding: 10px 0;
+  padding: 0 20px;
   border-radius: 15px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   width: 100%;

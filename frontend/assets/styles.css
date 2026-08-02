@@ -7,24 +7,17 @@
 #menubar
 {
     display: none;
-    background: linear-gradient(to right, red, blue);
     width: 100%;
-}
-#menubar button
-{
-    background: none;
-    font-size: 2.3em;
-    padding: 5px 0 5px 5px;
+    height: 40px;
 }
 
 h1
 {
     font-size: 2.5em;
-    line-height: 1.4em;
     font-weight: 100;
     color: #fff;
     margin: 0;
-    padding: 1em 10px;
+    padding: 0.75em 10px;
 }
 h2
 {
@@ -32,7 +25,7 @@ h2
     font-weight: 100;
     color: #2F2D2C;
     margin: 0;
-    padding: 0.8em 0;
+    padding: 0.5em 0;
 }
 p
 {
@@ -72,7 +65,6 @@ video
 {
     object-fit: cover;
 }
-
 header
 {
     display: block;
@@ -156,25 +148,6 @@ header
     }
 }
 
-nav
-{
-    display: block;
-    background-color: #38b2a3;
-    text-align: center;
-}
-nav a
-{
-    color: white;
-    font-size: 1em;
-    padding: 10px 15px;
-    display: inline-block;
-}
-nav a:hover
-{
-    background-color: #b2e7dc;
-    color: #1f1f1f;
-}
-
 article
 {
     width: 90%;
@@ -185,7 +158,7 @@ article
 }
 article img
 {
-    box-shadow: 0 0 10px 2px #4c4948;
+    box-shadow: 0 0 8px 0 #aba9a9;
     border-radius: 5px;
 }
 article ul
@@ -194,178 +167,38 @@ article ul
 }
 article section
 {
-    margin: 0 8% 0 8%;
-    max-width: 700px;
+    margin: 0 40px;
 }
 
 footer
 {
     background: #2F2C2C;
-    height: 270px;
-}
-footer section
-{
-    width: 33.33%;
-    float: left;
-}
-footer section ul li
-{
-    color: #E2DBDB;
-    margin: 0 0 0.3em 3em;
-}
-footer section ul li a
-{
-    font-size: 0.8em;
-}
-footer section h2
-{
-    color: #E2DBDB;
-    text-align: center;
-    font-size: 1.3em;
-}
-footer section p
-{
-    color: #E2DBDB;
-    font-size: 0.8em;
-    padding: 0 0.8em 1em 0.8em;
-}
-footer section i
-{
-    padding-right: 1em;
 }
 
-footer section form input
-{
-    width: 90%;
-    padding: 5px 1% 5px 1%;
-    font-size: 0.9em;
-}
-footer section form textarea
-{
-    width: 90%;
-    height: 6em;
-    padding: 5px 1% 5px 1%;
-    font-size: 0.9em;
-}
-footer section form .messageSubmit
-{
-    border: 1px solid grey;
-    width: 30%;
-    padding: 6px 0 6px 0;
-    cursor: pointer;
-}
-footer section form .messageSubmit:hover
-{
-    border: 1px solid red;
-}
-
-#unterFooter, #unterFooter2
-{
-    background: #343a40;
-    border-top: 1px solid #686868;
-}
-#unterFooter ul, #unterFooter2 ul
-{
-    text-align: center;
-}
-#unterFooter ul li, #unterFooter2 ul li
-{
-    display: inline;
-    font-size: 0.8em;
-    line-height: 2.7em;
-    cursor: pointer;
-    color: #E2DBDB;
-    padding: 0 0.6em 0 0.6em;
-}
-#unterFooter ul li a
-{
-    color: #E2DBDB;
-}
-#unterFooter ul li a:hover
-{
-    text-decoration: underline;
-}
-#unterFooter2
-{
-    padding: 1em;
-}
-#unterFooter
-{
-    padding: 0.3em;
-}
-
-@media screen and (max-width: 800px)
-{
-    body
-    {
-        font-size: 90%;
-    }
-}
 @media screen and (max-width: 550px)
 {
     body, option
     {
-        font-size: 85%;
+        font-size: 90%;
     }
-    article
+    article section
     {
-        margin: 0.6em 0 0 0;
-        width: 100%;
-    }
-    footer
-    {
-        height: auto;
-        font-size: 112%;
-    }
-    footer section
-    {
-        width: 100%;
-        float: none;
-        min-height: 120px;
-    }
-    footer section ul
-    {
-        padding-bottom: 20px;
-    }
-    footer section form
-    {
-        padding-bottom: 20px;
-        margin: 0 auto;
-        text-align: center;
-        width: 85%;
+        margin: 0 25px;
     }
 }
-@media screen and (min-width: 380px)
+@media screen and (max-width: 480px)
 {
-    nav
-    {
-        display: block !important;
-    }
-}
-@media screen and (max-width: 380px)
-{
-    body
-    {
-        font-size: 70%;
-    }
     #menubar
     {
         display: block;
     }
-    header,#unterFooter
+    .logoutBtn
     {
-        font-size: 95%;
+        display: none;
     }
-    nav a
+    article
     {
-        font-size: 1.3em;
-        display: block;
-    }
-}
-@media screen and (max-width: 290px)
-{
-    article section
-    {
-        margin: 0 12px 0 12px;
+        margin: 10px 0 0 0;
+        width: 100%;
     }
 }

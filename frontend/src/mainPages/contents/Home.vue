@@ -20,7 +20,7 @@ onUnmounted(() => clearInterval(interval()));
           <figure :style="{ transform: `translateX(-${showIndex * 100}%)`}">
             <img v-for="(image, index) in images" :key="index" :src="image" alt="slider image">
           </figure>
-      </div>
+        </div>
       <p> Marsik is one of the cuttest cats that have ever existed in the universe.
         He is fat and cute. Moreover, he likes to be a cat. <br>
         His smells like a cat as usual and when he wants to lay down and sleep,
@@ -35,22 +35,6 @@ onUnmounted(() => clearInterval(interval()));
         <li> Basic </li>
       </ul>
     </section>
-    <br>
-    <section>
-      <h2> Marsik wants to say something to you: </h2>
-      <div class="Willkommen">
-        <img src="/graphicComponents/pictures/welcome.jpg" style="box-shadow: none;" alt="willkommen" class="willkommen">
-        <br>
-        <h2> Marsik is: </h2>
-        <ul>
-          <li> A Cat </li>
-          <li> A Cat</li>
-          <li> A Cat </li>
-          <li> And a Cat </li>
-        </ul>
-      </div>
-    </section>
-    <br>
     <section>
       <h2> Marsik's childhood </h2>
       <div id="childhoodBox">
@@ -70,6 +54,7 @@ onUnmounted(() => clearInterval(interval()));
   width: 100%;
   overflow: hidden;
   position: relative;
+  margin-bottom: 10px;
 }
 figure
 {

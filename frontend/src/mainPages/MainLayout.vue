@@ -1,13 +1,12 @@
 <script setup>
 import "../../assets/styles.css";
-import {isPopupVisible, handlePopup, setupMenuToggle, customPopup} from "../../assets/features.js";
-import { onMounted } from "vue";
+import {isPopupVisible, handlePopup, customPopup} from "../../assets/features.js";
+import {onMounted, ref} from "vue";
 import axios from "axios";
 import {useRouter} from "vue-router";
 import {useWindowScroll} from "@vueuse/core";
 onMounted(() => {
   check();
-  setupMenuToggle();
 });
 
 const {y} = useWindowScroll();
@@ -58,8 +57,35 @@ async function logout() {
     customPopup("Fatal Error: ", e, true);
   }
 }
+
+const links = [
+  { name: "Privacy Policy", href: "/privacy" },
+  { name: "Terms of Use", href: "/termsOfUse" },
+  { name: "Legal notice", href: "/legalNotice" },
+  { name: "Service", href: "/service" },
+  { name: "Quiz", href: "/quiz" },
+  { name: "Help", href: "/help" },
+  { name: "News", href: "/news" },
+  { name: "Career", href: "/career" },
+]
+const drawer = ref(false)
 </script>
 <template>
+  <v-app-bar color="primary" height="40">
+    <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+    <v-spacer></v-spacer>
+    <v-btn icon="mdi-logout" variant="text" @click="logout"></v-btn>
+  </v-app-bar>
+  <v-navigation-drawer color="blue" v-model="drawer" location="left">
+    <v-list>
+      <v-list-item title="Home" to="home"></v-list-item>
+      <v-list-item title="Impressions" to="impressions"></v-list-item>
+      <v-list-item title="Videos" to="videos"></v-list-item>
+      <v-list-item title="Contact" to="contact"></v-list-item>
+      <v-list-item title="Chat" to="chat"></v-list-item>
+    </v-list>
+  </v-navigation-drawer>
+
   <transition name="popup">
     <div id="popup" v-if="isPopupVisible">
       <h2> The following message appears:</h2>
@@ -67,78 +93,69 @@ async function logout() {
       <button @click="handlePopup(false)">Ok</button>
     </div>
   </transition>
+
   <div id="global">
     <audio ref="audioPlayer" src="/audio/meow.mp4"></audio>
     <button @click="logout" class="logoutBtn" :class="{ showLogout: y > 400}">Logout</button>
-    <div id="menubar">
-      <button> <i class="fa fa-bars"> </i> </button>
-    </div>
+    <div id="menubar"></div>
     <header>
       <h1> Marsik the Kitty Cat </h1>
     </header>
-    <nav>
-      <router-link to="home">Home</router-link>
-      <router-link to="about">About</router-link>
-      <router-link to="videos">Videos</router-link>
-      <router-link to="contact">Contact</router-link>
-      <router-link to="more">More</router-link>
-    </nav>
-    <router-view> </router-view> <!-- article with the specific side content -->
-    <footer>
-      <section>
-        <h2> About the Page </h2>
-        <p> Marsik is a kitten who likes to be a kitten. He is a cat who is extraordinary and likes to show his kitten-like nature to other people. That's why Marsik, with the help of his owner, created this page to show others what kind of kitten Marsik is. </p>
-        <p> Contact: </p>
-        <p> <i class="fa fa-phone"> </i> Don't Call Marsik </p>
-        <p> <i class="fa fa-envelope"> </i> No Mail, bro </p>
-      </section>
-      <section>
-        <h2> Useful links: </h2>
-        <ul>
-          <li> <a @click="handlePopup(true)"> To another page </a> </li>
-          <li> <a @click="handlePopup(true)"> Secret page </a> </li>
-          <li> <a @click="customPopup('The following message appeared:', 'This link was blocked by Marsik the Link-Cat', false)"> Hunting Video </a> </li>
-        </ul>
-      </section>
-      <section>
-        <h2> Feedback about the page </h2>
-        <form method="POST">
-          <input name="userName" type="text" placeholder="Your name" autocomplete="off" /> <br> <br>
-          <textarea name="message"> </textarea> <br> <br>
-          <input class="messageSubmit" name="messageSubmit" value="Send" type="button" onclick="alert('Marsik the Kitty does not care about your feedback')"/>
-        </form>
-      </section>
-    </footer>
-    <div id="unterFooter">
-      <ul>
-        <li> <router-link to="contact"> Contact </router-link> </li>
-        <li> │ </li>
-        <li> <router-link to="../privacy"> Privacy policy </router-link> </li>
-        <li> │ </li>
-        <li> <router-link to="../termsOfUse"> Terms of use </router-link> </li>
-        <li> │ </li>
-        <li> <router-link to="../legalNotice"> Legal notice </router-link> </li>
-        <li> │ </li>
-        <li> <router-link to="../service"> Service </router-link> </li>
-        <li> │ </li>
-        <li> <router-link to="../quiz"> Quiz </router-link> </li>
-        <li> | </li>
-        <li> <router-link to="../help"> Help </router-link> </li>
-        <li> │ </li>
-        <li> <router-link to="../news"> News </router-link> </li>
-        <li> │ </li>
-        <li> <router-link to="../career"> Career </router-link>  </li>
-      </ul>
-    </div>
-    <div id="unterFooter2">
-      <ul>
-        <li> &copy; 2019 Marsik the Cat </li>
-        <li> │ </li>
-        <li> All rights reserved </li>
-      </ul>
-    </div>
+    <v-tabs bg-color="rgb(0 161 141)" align-tabs="center" height="40">
+      <v-tab to="home" text="Home"></v-tab>
+      <v-tab to="impressions" text="Impressions"></v-tab>
+      <v-tab to="videos" text="Videos"></v-tab>
+      <v-tab to="contact" text="Contact"></v-tab>
+      <v-tab to="chat" text="Chat"></v-tab>
+    </v-tabs>
+    <router-view> </router-view>
   </div>
+  <v-footer class="d-flex align-center justify-center ga-2 flex-wrap flex-grow-1 py-3" color="surface-light">
+    <v-btn v-for="link in links"
+        :key="link" :text="link.name"
+        variant="text" color="white" :to="link.href" rounded
+    ></v-btn>
+    <v-divider color="grey"></v-divider>
+    <div class="flex-1-0-100 text-center mt-6 text-white">
+      &copy; {{ new Date().getFullYear() }} Marsik the Cat │ All rights reserved
+    </div>
+  </v-footer>
 </template>
+<style>
+.v-tab
+{
+  min-width: 85px !important;
+}
+.v-app-bar
+{
+  display: none;
+}
+
+@media screen and (min-width: 480px)
+{
+  .v-navigation-drawer
+  {
+    display: none !important;
+  }
+}
+
+@media screen and (max-width: 480px)
+{
+  .v-tabs
+  {
+    display: none !important;
+  }
+  .v-app-bar
+  {
+    display: block;
+  }
+  .v-navigation-drawer
+  {
+    display: block !important;
+    background-color: rgb(0 161 141);
+  }
+}
+</style>
 <script>
 import {customPopup} from "../../assets/features.js";
 

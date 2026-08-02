@@ -7,10 +7,9 @@ import Unauthorised from "../../assets/Unauthorised.vue";
 import Main from "../mainPages/MainLayout.vue";
 // Main Pages
 import Home from '../mainPages/contents/Home.vue';
-import About from '../mainPages/contents/About.vue';
+import Impressions from '../mainPages/contents/Impressions.vue';
 import Videos from '../mainPages/contents/Videos.vue';
 import Contact from "../mainPages/contents/Contact.vue";
-import More from "../mainPages/contents/More.vue";
 // Footer Pages
 import Career from "../footerPages/Career.vue";
 import Help from "../footerPages/Help.vue";
@@ -20,6 +19,7 @@ import Privacy from "../footerPages/Privacy.vue";
 import Quiz from "../footerPages/Quiz.vue";
 import Service from "../footerPages/Service.vue";
 import TermsOfUse from "../footerPages/TermsOfUse.vue";
+import Chat from "../mainPages/contents/Chat.vue";
 
 const routes = [
     {   path: '/', redirect: '/login'},
@@ -32,10 +32,10 @@ const routes = [
         meta: { title: 'Marsik the cat'},
         children: [
             {   path: 'home', name: 'Home', component: Home},
-            {   path: 'about', name: 'About',  component: About},
+            {   path: 'impressions', name: 'Impressions',  component: Impressions},
             {   path: 'videos', name: 'Videos',  component: Videos},
             {   path: 'contact', name: 'Contact',  component: Contact},
-            {   path: 'more', name: 'More',  component: More},
+            {   path: 'chat', name: 'Chat',  component: Chat},
         ]
     },
     {   path: '/career', name: 'Career', component: Career},
