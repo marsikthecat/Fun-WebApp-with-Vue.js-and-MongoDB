@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Dont forget this, or you are cooked:
+.env
