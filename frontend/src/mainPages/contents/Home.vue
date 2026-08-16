@@ -1,15 +1,33 @@
 <script setup>
 import {onMounted, onUnmounted, ref} from "vue";
-const images = ["/graphicComponents/pictures/home-slider1.jpg",
-                "/graphicComponents/pictures/home-slider2.jpg",
-                "/graphicComponents/pictures/home-slider3.jpg",
-                "/graphicComponents/pictures/home-slider4.jpg",]
+const images = [
+  "/graphicComponents/pictures/home-slider1.jpg",
+  "/graphicComponents/pictures/home-slider2.jpg",
+  "/graphicComponents/pictures/home-slider3.jpg",
+  "/graphicComponents/pictures/home-slider4.jpg",
+]
+const childhoodImages = [
+  "/graphicComponents/pictures/childhood1.jpg",
+  "/graphicComponents/pictures/childhood2.jpg",
+  "/graphicComponents/pictures/childhood3.jpg",
+  "/graphicComponents/pictures/childhood4.jpg",
+  "/graphicComponents/pictures/childhood5.jpg",
+]
+const childhoodDelay = (index) => {
+  if (index === 0) {
+    return "0s";
+  }
+  return `-${(childhoodImages.length - index) * 3}s`;
+}
 
 const showIndex = ref(0);
 const interval = () => showIndex.value = (showIndex.value + 1) % images.length;
+let intervalId;
 
-onMounted(() => setInterval(() => interval(), 8000));
-onUnmounted(() => clearInterval(interval()));
+onMounted(() => {
+  intervalId = setInterval(interval, 8000);
+});
+onUnmounted(() => clearInterval(intervalId));
 </script>
 
 <template>
@@ -37,12 +55,14 @@ onUnmounted(() => clearInterval(interval()));
     </section>
     <section>
       <h2> Marsik's childhood </h2>
-      <div id="childhoodBox">
-        <img src="/graphicComponents/pictures/childhood1.jpg" alt="childhood">
-        <img src="/graphicComponents/pictures/childhood2.jpg" alt="childhood">
-        <img src="/graphicComponents/pictures/childhood3.jpg" alt="childhood">
-        <img src="/graphicComponents/pictures/childhood4.jpg" alt="childhood">
-        <img src="/graphicComponents/pictures/childhood5.jpg" alt="childhood">
+      <div class="childhoodBox">
+        <img
+            v-for="(image, index) in childhoodImages"
+            :key="image"
+            :src="image"
+            :style="{ '--delay': childhoodDelay(index) }"
+            alt="Marsik's childhood"
+        >
       </div>
     </section>
   </article>
@@ -63,52 +83,33 @@ figure
   transition: transform 4s ease-in-out;
 }
 
-#childhoodBox
+.childhoodBox
 {
   position: relative;
-  height: calc(70px + 30vw);
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
 }
-#childhoodBox img
+.childhoodBox img
 {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  animation: fadeOut cubic-bezier(0.3, 1, 0.7, 4) infinite;
-  animation-duration: 14s;
+  opacity: 0;
+  animation: childhoodFade 15s ease-in-out infinite;
+  animation-delay: var(--delay);
 }
-#childhoodBox img:nth-child(1)
-{
-  animation-delay: 4s;
-}
-#childhoodBox img:nth-child(2)
-{
-  animation-delay: 6s;
-}
-#childhoodBox img:nth-child(3)
-{
-  animation-delay: 8s;
-}
-#childhoodBox img:nth-child(4)
-{
-  animation-delay: 10s;
-}
-#childhoodBox img:nth-child(5)
-{
-  animation-delay: 12s;
-}
-@keyframes fadeOut {
+@keyframes childhoodFade {
   0%
   {
     opacity: 0;
   }
-  50%
+  4%, 16%
   {
     opacity: 1;
   }
-  100%
+  20%, 100%
   {
     opacity: 0;
   }

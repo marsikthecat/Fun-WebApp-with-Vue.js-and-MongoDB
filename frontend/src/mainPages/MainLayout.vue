@@ -2,14 +2,14 @@
 import "../../assets/styles.css";
 import {isPopupVisible, handlePopup, customPopup} from "../../assets/features.js";
 import {onMounted, ref} from "vue";
-import axios from "axios";
 import {useRouter} from "vue-router";
-import {useWindowScroll} from "@vueuse/core";
+import {useApi} from "../composables/useApi.js";
+
 onMounted(() => {
   check();
 });
 
-const {y} = useWindowScroll();
+const api = useApi();
 const router = useRouter();
 async function check() {
   const token = sessionStorage.getItem("token");
@@ -18,13 +18,7 @@ async function check() {
     return;
   }
   try {
-    const result = await axios.post("http://localhost:8080/users/checkUser", {},
-        {
-          headers: {
-            Authorization: token
-          }
-        }
-    );
+    const result = await api.checkUser(token);
     if (result.status === 403) {
       await router.push("/unauthorised");
     }
@@ -40,12 +34,7 @@ async function logout() {
     return;
   }
   try {
-    const result = await axios.post(`http://localhost:8080/users/logout`, {},
-        {
-      headers: {
-        Authorization: token
-      }
-    });
+    const result = await api.logout(token);
     if (result.status === 200) {
       sessionStorage.removeItem("token");
       customPopup("Logout successful!", "Marsik wants to say something to you: " + "See you later!", false);
@@ -96,18 +85,26 @@ const drawer = ref(false)
 
   <div id="global">
     <audio ref="audioPlayer" src="/audio/meow.mp4"></audio>
-    <button @click="logout" class="logoutBtn" :class="{ showLogout: y > 400}">Logout</button>
     <div id="menubar"></div>
     <header>
       <h1> Marsik the Kitty Cat </h1>
     </header>
-    <v-tabs bg-color="rgb(0 161 141)" align-tabs="center" height="40">
-      <v-tab to="home" text="Home"></v-tab>
-      <v-tab to="impressions" text="Impressions"></v-tab>
-      <v-tab to="videos" text="Videos"></v-tab>
-      <v-tab to="contact" text="Contact"></v-tab>
-      <v-tab to="chat" text="Chat"></v-tab>
-    </v-tabs>
+    <div class="navTabs">
+      <v-tabs bg-color="rgb(0 161 141)" align-tabs="center" height="40">
+        <v-tab to="home" text="Home"></v-tab>
+        <v-tab to="impressions" text="Impressions"></v-tab>
+        <v-tab to="videos" text="Videos"></v-tab>
+        <v-tab to="contact" text="Contact"></v-tab>
+        <v-tab to="chat" text="Chat"></v-tab>
+      </v-tabs>
+      <v-btn
+          class="navLogout"
+          icon="mdi-logout"
+          variant="text"
+          color="white"
+          @click="logout"
+      ></v-btn>
+    </div>
     <router-view> </router-view>
   </div>
   <v-footer class="d-flex align-center justify-center ga-2 flex-wrap flex-grow-1 py-3" color="surface-light">
@@ -124,7 +121,19 @@ const drawer = ref(false)
 <style>
 .v-tab
 {
-  min-width: 85px !important;
+  min-width: 50px !important;
+}
+.navTabs
+{
+  position: relative;
+  background: rgb(0 161 141);
+}
+.navLogout
+{
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
 }
 .v-app-bar
 {
@@ -144,6 +153,10 @@ const drawer = ref(false)
   .v-tabs
   {
     display: none !important;
+  }
+  .navLogout
+  {
+    display: none;
   }
   .v-app-bar
   {

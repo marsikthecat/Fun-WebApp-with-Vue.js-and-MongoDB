@@ -40,6 +40,10 @@
 
 <script>
 import {customPopup} from "../../../assets/features.js";
+import {useApi} from "../../composables/useApi.js";
+
+const api = useApi();
+
 export default {
   name: 'Contact',
   data() {
@@ -61,15 +65,8 @@ export default {
           kontaktnachricht: this.userContentMessage
         };
         try {
-          const response = await fetch('http://localhost:8080/message/send', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(mailContent)
-          });
-          const result = await response.text();
-          customPopup("Thank you!", result, false);
+          const response = await api.sendMessage(mailContent);
+          customPopup("Thank you!", response.data, false);
         } catch (error) {
           customPopup("An Error occurred", error.toString(), true);
         }

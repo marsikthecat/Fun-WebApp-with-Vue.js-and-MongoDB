@@ -1,10 +1,11 @@
 <script setup>
 import {onMounted, ref} from "vue";
-import axios from "axios";
 import router from "../router/router.js";
 import SnackBar from "../../assets/globalFeatures/SnackBar.vue";
+import {useApi} from "../composables/useApi.js";
 
 const snackBar = ref();
+const api = useApi();
 
 const users = ref([]);
 const messagesList = ref([]);
@@ -33,14 +34,7 @@ onMounted(async () => {
     return;
   }
   try {
-    const result = await axios.post(
-        "http://localhost:8080/users/checkUser", {},
-        {
-          headers: {
-            Authorization: token
-          }
-        }
-    );
+    const result = await api.checkUser(token);
     if (result.status === 403) {
       await router.push("/unauthorised");
     }
@@ -51,9 +45,9 @@ onMounted(async () => {
 
   try {
     const [userFetch, messagesFetch, quizListFetch] = await Promise.all([
-      axios.get("http://localhost:8080/users",  { headers: {Authorization: token} }),
-      axios.get("http://localhost:8080/message"), // TODO: auth for this point
-      axios.get("http://localhost:8080/quiz"),
+      api.getUsers(token),
+      api.getMessages(), // TODO: auth for this point
+      api.getQuiz(),
     ])
     users.value = userFetch.data;
     messagesList.value = messagesFetch.data;
@@ -69,7 +63,7 @@ const openDeleteDialog = (question) => {
 }
 
 const remove = async (idToDelete) => {
-  return axios.delete(`http://localhost:8080/quiz/deleteQuestion?questionID=${idToDelete}`)
+  return api.deleteQuizQuestion(idToDelete)
       .then(response => {
         if (response.status === 200) {
           quizList.value = quizList.value.filter((q => q.id !== idToDelete));
@@ -107,12 +101,7 @@ const addQuestion = async () => {
   if (isNotFilled(questionText, options[0], options[1], options[2],options[3], correctIndex)) {
     snackBar.value.pushSnackBar("please fill in all fields", "error");
   } else {
-    const addQuestionRequest = await axios.post("http://localhost:8080/quiz/store", options, {
-      params: {
-        question: questionText,
-        correctIndex,
-      },
-    });
+    const addQuestionRequest = await api.storeQuizQuestion(questionText, correctIndex, options);
     if (addQuestionRequest.status === 200) {
       const newAddedQuestion = addQuestionRequest.data;
       quizList.value.push({id: newAddedQuestion.id, question: newAddedQuestion.question,

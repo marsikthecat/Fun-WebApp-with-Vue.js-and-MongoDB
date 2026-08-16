@@ -1,7 +1,9 @@
 <script setup>
 import {computed, onMounted, ref} from "vue";
 import {customPopup} from "../../assets/features.js";
+import {useApi} from "../composables/useApi.js";
 
+const api = useApi();
 const questionList = ref([]);
 const index = ref(0);
 const correctAnswers = ref(0);
@@ -18,8 +20,8 @@ const finished = ref(false)
 
 onMounted(async () => {
     try {
-      const questionRequest = await fetch('http://localhost:8080/quiz');
-      questionList.value = await questionRequest.json();
+      const questionRequest = await api.getQuiz();
+      questionList.value = questionRequest.data;
     } catch (e) {
       customPopup("Fatal error", e, true);
     }

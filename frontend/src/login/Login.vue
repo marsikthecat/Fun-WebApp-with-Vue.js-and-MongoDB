@@ -1,10 +1,12 @@
 <script setup>
 import {ref} from "vue";
-import axios from "axios";
 import {useRouter} from "vue-router";
 import {customPopup} from "../../assets/features.js";
 import SnackBar from "../../assets/globalFeatures/SnackBar.vue"
+import {useApi} from "../composables/useApi.js";
+
 const snackBar = ref()
+const api = useApi();
 
 const router = useRouter();
 
@@ -27,10 +29,7 @@ const login = async () => {
   // Only for entering admin-panel easier for development!
   if (userNameInput.value === "admin-marsik") {
     try {
-      const res = await axios.post("http://localhost:8080/users/admin-login", {
-        name: userNameInput.value,
-        password: passwordInput.value,
-      })
+      const res = await api.adminLogin(userNameInput.value, passwordInput.value);
       if (res.status === 200) {
         sessionStorage.setItem("admin-token", res.data);
         await router.push("/admin")
@@ -41,10 +40,7 @@ const login = async () => {
     return;
   }
   try {
-    const res = await axios.post(`http://localhost:8080/users/login`, {
-      name: userNameInput.value,
-      password: passwordInput.value,
-    });
+    const res = await api.login(userNameInput.value, passwordInput.value);
     sessionStorage.setItem("token", res.data);
     await router.push('/main/home');
   } catch (error) {
@@ -61,7 +57,7 @@ const submit = async () =>  {
   const username = newUserNameInput.value;
   const password = newPasswordInput.value;
     try {
-      await axios.post(`http://localhost:8080/users/registering?`, { name: username, password: password});
+      await api.register(username, password);
       snackBar.value.pushSnackBar("Sign up successful. Welcome " + username, "success")
     } catch (error) {
       if (error.status === 409) {

@@ -47,6 +47,36 @@ const gallery = [
   }
 ]
 const currentIndex = shallowRef(0);
+const dailyRoutine = [
+  {
+    time: "At 6:00",
+    action: "Getting up, walking around, meowing after food, farting",
+  },
+  {
+    time: "6:30-12:30",
+    action: "Walking outside, catching mice or birds or sleeping like a sphere at home all day",
+  },
+  {
+    time: "12:30-13:00",
+    action: "Meowing after food, lunch",
+  },
+  {
+    time: "13:00-16:00",
+    action: "Sleeping or playing outside all the time",
+  },
+  {
+    time: "16:00-20:00",
+    action: "Laying on the sofa like a sphere",
+  },
+  {
+    time: "20:00-5:00",
+    action: "Brushing your teeth, undressing, taking a shower and secretly sneaking to the owner's bed and sleeping on it",
+  },
+  {
+    time: "5:00-6:00",
+    action: "Going away and continue sleeping somewhere else",
+  },
+];
 </script>
 
 <template>
@@ -61,40 +91,20 @@ const currentIndex = shallowRef(0);
         <h2>Marsik's daily routine  </h2>
         <p> If you would like to know how Marsik's exciting and exciting daily routine is structured,
           just take a look at the table below to understand Marsik's daily routine. </p> <br>
-        <table>
-          <tr>
-            <th style="background-color:#198620"> Time</th>
-            <th style="background-color:#f29b18"> Action </th>
-          </tr>
-          <tr>
-            <td class="td1"> At 6:00 </td>
-            <td class="td2"> Getting up, walking around, meowing after food, farting </td>
-          </tr>
-          <tr>
-            <td class="td1"> 6:30-12:30 </td>
-            <td class="td2"> Walking outside, catching mice or birds or sleeping like a sphere at home all day</td>
-          </tr>
-          <tr>
-            <td class="td1"> 12:30-13:00  </td>
-            <td class="td2"> Meowing after food, lunch </td>
-          </tr>
-          <tr>
-            <td class="td1"> 13:00-16:00 </td>
-            <td class="td2"> Sleeping or playing outside all the time </td>
-          </tr>
-          <tr>
-            <td class="td1"> 16:00-20:00 </td>
-            <td class="td2"> Laying on the sofa like a sphere </td>
-          </tr>
-          <tr>
-            <td class="td1"> 20:00-5:00 </td>
-            <td class="td2"> Brushing your teeth, undressing, taking a shower and secretly sneaking to the owner's bed and sleeping on it</td>
-          </tr>
-          <tr>
-            <td class="td1"> 5:00-6:00  </td>
-            <td class="td2"> Going away and continue sleeping somewhere else </td>
-          </tr>
-        </table>
+        <v-table class="routineTable" density="compact">
+          <thead>
+            <tr>
+              <th class="timeHeader">Time</th>
+              <th class="actionHeader">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="item in dailyRoutine" :key="item.time">
+              <td class="td1">{{ item.time }}</td>
+              <td class="td2">{{ item.action }}</td>
+            </tr>
+          </tbody>
+        </v-table>
       </section>
        <br>
       <section>
@@ -127,15 +137,27 @@ export default {
 </script>
 
 <style scoped>
-table
+.routineTable
 {
-  border-collapse: collapse;
   border: 1px solid black;
 }
-th,td
+.routineTable :deep(table)
+{
+  border-collapse: collapse;
+}
+.routineTable :deep(th),
+.routineTable :deep(td)
 {
   border: 1px solid black;
   padding: 8px;
+}
+.timeHeader
+{
+  background-color: #198620;
+}
+.actionHeader
+{
+  background-color: #f29b18;
 }
 .td1
 {
