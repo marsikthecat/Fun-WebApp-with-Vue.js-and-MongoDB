@@ -14,19 +14,14 @@ const childhoodImages = [
   "/graphicComponents/pictures/childhood5.jpg",
 ]
 const childhoodDelay = (index) => {
-  if (index === 0) {
-    return "0s";
-  }
-  return `-${(childhoodImages.length - index) * 3}s`;
+  return index === 0 ? "0s" : `-${(childhoodImages.length - index) * 3}s`
 }
 
 const showIndex = ref(0);
 const interval = () => showIndex.value = (showIndex.value + 1) % images.length;
-let intervalId;
 
-onMounted(() => {
-  intervalId = setInterval(interval, 8000);
-});
+let intervalId;
+onMounted(() => intervalId = setInterval(interval, 8000));
 onUnmounted(() => clearInterval(intervalId));
 </script>
 
@@ -56,13 +51,9 @@ onUnmounted(() => clearInterval(intervalId));
     <section>
       <h2> Marsik's childhood </h2>
       <div class="childhoodBox">
-        <img
-            v-for="(image, index) in childhoodImages"
-            :key="image"
-            :src="image"
-            :style="{ '--delay': childhoodDelay(index) }"
-            alt="Marsik's childhood"
-        >
+        <img v-for="(image, index) in childhoodImages"
+            :key="image" :src="image" :style="{ '--delay': childhoodDelay(index) }"
+            alt="Marsik's childhood">
       </div>
     </section>
   </article>
