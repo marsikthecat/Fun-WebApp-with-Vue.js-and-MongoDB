@@ -5,32 +5,34 @@
     <p class="title"> We are desperately searching a: <br><b> Cat Litter Box Management Specialist</b> </p>
     <button @click="customPopup('Fatal error:', 'Could not find a job', true)">Apply now</button>
   </div>
-  <div id="containerLeft">
-    <h3> Your qualifications:</h3>
-    <ul>
-      <li> You are flexible </li>
-      <li> You are very resilient </li>
-      <li> You are reliable </li>
-      <li> You have the general university entrance qualification </li>
-      <li> You have many years of experience in garbage collection </li>
-      <li> You have a driver's license </li>
-    </ul>
-  </div>
-  <div id="containerMiddle">
-    <h3> What we offer you: </h3>
-    <ul>
-      <li> Smelly working atmosphere </li>
-      <li> 200 cans of cat food for you </li>
-      <li> Regular bank account deductions </li>
-      <li> Penalty interest </li>
-      <li> Good chances of descent </li>
-      <li> 30 days holiday in the desert (without water) </li>
-      <li> Well-founded exploitation for career changers </li>
-    </ul>
-  </div>
-  <div id="containerRight">
-    <h3> We are not looking forward to receiving your application </h3>
-    <p> If you have any questions, please contact Marsik by the helicopter</p>
+  <div id="bottomDescription">
+    <div>
+      <h3> Your qualifications:</h3>
+      <ul>
+        <li> You are flexible </li>
+        <li> You are very resilient </li>
+        <li> You are reliable </li>
+        <li> You have the general university entrance qualification </li>
+        <li> You have many years of experience in garbage collection </li>
+        <li> You have a driver's license </li>
+      </ul>
+    </div>
+    <div>
+      <h3> What we offer you: </h3>
+      <ul>
+        <li> Smelly working atmosphere </li>
+        <li> 200 cans of cat food for you </li>
+        <li> Regular bank account deductions </li>
+        <li> Penalty interest </li>
+        <li> Good chances of descent </li>
+        <li> 30 days holiday in the desert (without water) </li>
+        <li> Well-founded exploitation for career changers </li>
+      </ul>
+    </div>
+    <div>
+      <h3> We are not looking forward to receiving your application </h3>
+      <p> If you have any questions, please contact Marsik by the helicopter</p>
+    </div>
   </div>
 </template>
 
@@ -89,22 +91,15 @@ button:hover
 {
   background-color: #262626;
 }
-#containerLeft, #containerMiddle, #containerRight
+#bottomDescription
 {
-  width: 33.3%;
-  float: left;
-}
-#containerRight p
-{
-  padding: 0 8px 10px 20px;
+  display: flex;
 }
 @media screen and (max-width: 780px)
 {
-  #containerLeft, #containerMiddle, #containerRight
+  #bottomDescription
   {
-    width: 100%;
-    float: none;
-    padding: 10px 0 10px 0;
+    display: block;
   }
 }
 </style>
