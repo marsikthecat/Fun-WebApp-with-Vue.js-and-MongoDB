@@ -52,9 +52,10 @@ const restartGame = () => {
 </script>
 
 <template>
+  <h2>Quiz</h2>
   <div class="container" v-if="questionList.length !== 0" :style="{backgroundColor: containerColor }">
     <div id="question-container" class="hide">
-      <h2 id="question" v-text="questionList[index].question" ></h2>
+      <h3 id="question" v-text="questionList[index].question" ></h3>
       <div id="answer-buttons" class="btn-grid">
         <button class="btn" v-for="(option, i) in questionList[index].options" :key="i"
                 @click="evaluate(i === questionList[index].correctIndex)"
@@ -75,12 +76,7 @@ export default {
 <style scoped>
 .container
 {
-  box-shadow: 0 0 10px 2px;
   text-align: center;
-}
-#question
-{
-  padding: 1em;
 }
 .btn
 {

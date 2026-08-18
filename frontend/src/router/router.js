@@ -3,8 +3,10 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Login from '../login/Login.vue';
 import AdminPanel from "../admin/adminPanel.vue";
 import Unauthorised from "../../assets/Unauthorised.vue";
-// Wrapper For Main Pages
+// Wrapper for main pages
 import Main from "../mainPages/MainLayout.vue";
+// Wrapper for footer pages
+import FooterLayout from '../mainPages/FooterLayout.vue';
 // Main Pages
 import Home from '../mainPages/contents/Home.vue';
 import Impressions from '../mainPages/contents/Impressions.vue';
@@ -38,14 +40,29 @@ const routes = [
             {   path: 'chat', name: 'Chat',  component: Chat},
         ]
     },
-    {   path: '/career', name: 'Career', component: Career},
-    {   path: '/help', name: 'Help', component: Help},
-    {   path: '/legalNotice', name: 'LegalNotice', component: LegalNotice},
-    {   path: '/news', name: 'News', component: News},
-    {   path: '/privacy', name: 'Privacy', component: Privacy},
-    {   path: '/quiz', name: 'Quiz', component: Quiz},
-    {   path: '/service', name: 'Service', component: Service},
-    {   path: '/termsOfUse', name: 'TermsOfUse', component: TermsOfUse}
+    {   path: '/footer',
+        name: 'footer',
+        component: FooterLayout,
+        meta: { title: 'Marsik the cat'},
+        children: [
+            {   path: 'career', name: 'Career', component: Career},
+            {   path: 'help', name: 'Help', component: Help},
+            {   path: 'legalNotice', name: 'LegalNotice', component: LegalNotice},
+            {   path: 'news', name: 'News', component: News},
+            {   path: 'privacy', name: 'Privacy', component: Privacy},
+            {   path: 'quiz', name: 'Quiz', component: Quiz},
+            {   path: 'service', name: 'Service', component: Service},
+            {   path: 'termsOfUse', name: 'TermsOfUse', component: TermsOfUse}
+        ]
+    },
+    {   path: '/career', name: 'CareerDirect', redirect: '/footer/career'},
+    {   path: '/help', name: 'HelpDirect', redirect: '/footer/help'},
+    {   path: '/legalNotice', name: 'LegalNoticeDirect', redirect: '/footer/legalNotice'},
+    {   path: '/news', name: 'NewsDirect', redirect: '/footer/news'},
+    {   path: '/privacy', name: 'PrivacyDirect', redirect: '/footer/privacy'},
+    {   path: '/quiz', name: 'QuizDirect', redirect: '/footer/quiz'},
+    {   path: '/service', name: 'ServiceDirect', redirect: '/footer/service'},
+    {   path: '/termsOfUse', name: 'TermsOfUseDirect', redirect: '/footer/termsOfUse'}
 
 ];
 const router = createRouter({

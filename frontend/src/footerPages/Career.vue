@@ -1,6 +1,7 @@
 <template>
+  <h2>Career</h2>
   <div class="card">
-    <h2> Shape your Future and become an slave of Marsik the kitty:</h2>
+    <h3> Shape your Future and become an slave of Marsik the kitty:</h3>
     <img src="/graphicComponents/footer/Stellenangebot.jpg" alt="careerPicture">
     <p class="title"> We are desperately searching a: <br><b> Cat Litter Box Management Specialist</b> </p>
     <button @click="customPopup('Fatal error:', 'Could not find a job', true)">Apply now</button>
@@ -50,16 +51,9 @@ ul
 {
   margin: 0 20px 0 25px;
 }
-h2
-{
-  padding: 0.5em;
-}
 .card
 {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.6);
-  width: 90%;
-  max-width: 900px;
-  margin: 1em auto;
   text-align: center;
 }
 .title

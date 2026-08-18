@@ -1,5 +1,5 @@
 <script setup>
-import {onMounted, onUnmounted} from "vue";
+import {onMounted, onUnmounted, reactive, ref} from "vue";
 import {customPopup} from "../../assets/features.js";
 
 onMounted(() => {
@@ -7,10 +7,26 @@ onMounted(() => {
       " privacy policy, click the button 'Get privacy information' ", false);
 })
 onUnmounted(() => document.body.removeAttribute("style"));
+
+const container = ref();
+const stage = ref();
+
+const x = ref(50);
+const y = ref(50);
+
+function doSomething() {
+    const width = container.value.offsetWidth;
+    const height = container.value.offsetHeight;
+    const maxX = stage.value.offsetWidth - width - 20;
+    const maxY = stage.value.offsetHeight - height - 15;
+    x.value = Math.random() * maxX;
+    y.value = Math.random() * maxY;
+}
 </script>
 
 <template>
-  <main>
+  <h2>Privacy</h2>
+  <main ref="stage">
       <button id="funnyContainer" ref="container" :style="{top: y + 'px', left: x + 'px'} "
               @mousemove="doSomething()">Get privacy information</button>
   </main>
@@ -19,41 +35,21 @@ onUnmounted(() => document.body.removeAttribute("style"));
 <style scoped>
 main
 {
-  width: 100vw;
-  height: 100vh;
+  height: 500px;
   background-image: linear-gradient(135deg, rgb(179, 255, 170), rgb(97, 216, 240), rgb(255, 172, 245));
 }
 #funnyContainer
 {
-  position: absolute;
+  position: relative;
   background-color: #0b6940;
   color: white;
-  font-size: 1.2em;
-  border-radius: 40px;
-  padding: 15px 20px;
+  border-radius: 30px;
+  padding: 10px 15px;
 }
 </style>
 
 <script>
 export default {
-  name: "Privacy",
-
-  data() {
-    return {
-      x: 50,
-      y: 50,
-    }
-  },
-  methods: {
-    doSomething() {
-      const elem = this.$refs.container;
-      const width = elem.offsetWidth;
-      const height = elem.offsetHeight;
-      const maxX = window.innerWidth - width;
-      const maxY = window.innerHeight - height;
-      this.x = Math.random() * maxX;
-      this.y = Math.random() * maxY;
-    },
-  }
+  name: "Privacy"
 }
 </script>

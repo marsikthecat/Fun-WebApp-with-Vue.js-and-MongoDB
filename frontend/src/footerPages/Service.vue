@@ -10,6 +10,7 @@ const dateTxt = ref("Expiration date: " + monthNames[date.getMonth()] + " " + da
 </script>
 
 <template>
+  <h2>Service</h2>
   <div class="coupon">
     <div class="container">
       <h3>Marsik presents...</h3>
@@ -34,8 +35,6 @@ const dateTxt = ref("Expiration date: " + monthNames[date.getMonth()] + " " + da
 {
   border: 3px dotted #9b9b9b;
   border-radius: 9px;
-  margin: 1em auto;
-  max-width: 600px;
   background-color: #f1f1f1;
 }
 h2

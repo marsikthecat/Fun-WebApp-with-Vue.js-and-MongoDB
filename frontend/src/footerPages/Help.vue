@@ -20,6 +20,7 @@ function loadSentences() {
 </script>
 
 <template>
+  <h2>Help</h2>
   <main>
     <div id="headerContainer">
       <h1> Dear User</h1>
@@ -31,8 +32,7 @@ function loadSentences() {
 <style scoped>
 main
 {
-  width: 100vw;
-  height: 100vh;
+  height: 500px;
   background: #14182a;
   color: white;
   align-content: center;

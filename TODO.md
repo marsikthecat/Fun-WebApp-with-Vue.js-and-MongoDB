@@ -1,20 +1,20 @@
 ## Ideas/to be considered
-- Star-animation in Service.vue when hovering the green button
 - Animations in Quiz.vue
-- News.vue - consider fetching real news data from free API
 
 ## Open
+- Feat: Star-animation in Service.vue when hovering the green button
 - Feat: Improve error and notification popups
 - Refactor: Move common/repeating UI-components in separate file to reduce redundancy e.g. textfields
 - Feat: Animate simple content, for example with fade-in, such as the footer content
 - Refactor: Compress size of the three videos
 - Rename: Rename all assets like images and videos so their purpose is clear
 
-
 ## In Progress
-- Feat: Welcome [username] notification after successful login
-- Feat: Improve timeline in News.vue using vuetify
+
 
 ## Done
+- Wrap footer content in mainlayout
 - Bug: Career.vue - sections are not next to each other when view not narrow/mobile
 - Refactor: One endpoint for login
+- Feat: Welcome [username] notification after successful login
+- Feat: Improve timeline in News.vue using vuetify

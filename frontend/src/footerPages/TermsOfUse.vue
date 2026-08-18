@@ -18,12 +18,11 @@
 
 <template>
   <div id="overLay" v-if="superPopupShown"></div>
-  <article>
     <div class="superPopUp" :class="{show: superPopupShown}" @click="superPopupShown = false">
       <h2>{{title}}</h2>
       <p>{{mainText}}</p>
     </div>
-    <h1> Terms of use </h1>
+    <h2> Terms of use </h2>
     <button v-for="(section, index) in sectionContents" :key="index" class="collapsible" @click="show(index)">
       {{ section }}
     </button>
@@ -94,7 +93,6 @@
         it might be necessary to interrupt the web experience.
       </p>
     </div>
-  </article>
 </template>
 
 <script>
@@ -104,11 +102,6 @@ export default {
 </script>
 
 <style scoped>
-h1
-{
-  color: #1f1f1f;
-}
-
 p
 {
   padding: 0 1em 1em 1em;
@@ -134,6 +127,7 @@ p
   width: 100vw;
   height: 100vh;
   top: 0;
+  left: 0;
   background-color: rgba(0, 0, 0, 0.6);
 }
 

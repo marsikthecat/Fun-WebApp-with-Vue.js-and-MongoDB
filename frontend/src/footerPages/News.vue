@@ -1,9 +1,8 @@
 <template>
-  <v-container class="py-8">
-    <v-row class="mb-6">
+    <v-row>
       <v-col>
-        <h1 class="text-h3 font-weight-bold mb-2">News Timeline</h1>
-        <v-divider class="my-4"></v-divider>
+        <h2>News Timeline</h2>
+        <v-divider></v-divider>
       </v-col>
     </v-row>
 
@@ -53,7 +52,6 @@
         </v-card>
       </v-timeline-item>
     </v-timeline>
-  </v-container>
 </template>
 
 <script setup>
@@ -109,31 +107,31 @@ const timelineItems = ref([
 </script>
 
 <style scoped>
-.news-timeline {
-  padding: 20px 0;
-}
-
-.news-card {
+.news-card 
+{
   transition: all 0.3s ease;
   border-radius: 8px;
   border-left: 4px solid;
 }
 
-.news-card:hover {
-  elevation: 4;
+.news-card:hover 
+{
   transform: translateY(-2px);
 }
 
-.line-height-lg {
+.line-height-lg 
+{
   line-height: 1.6;
   letter-spacing: 0.3px;
 }
 
-:deep(.v-timeline-item__dot) {
+:deep(.v-timeline-item__dot) 
+{
   box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.8);
 }
 
-@media (max-width: 960px) {
+@media (max-width: 960px) 
+{
   :deep(.v-timeline) {
     padding-left: 0;
   }
