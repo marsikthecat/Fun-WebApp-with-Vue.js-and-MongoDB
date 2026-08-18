@@ -9,11 +9,12 @@
 - Feat: Animate simple content, for example with fade-in, such as the footer content
 - Refactor: Compress size of the three videos
 - Rename: Rename all assets like images and videos so their purpose is clear
-- Feat: Improve timeline in News.vue using vuetify
-- Feat: Welcome [username] notification after successful login
-- Bug: Career.vue - sections are not next to each other when view not narrow/mobile
+
 
 ## In Progress
+- Feat: Welcome [username] notification after successful login
+- Feat: Improve timeline in News.vue using vuetify
 
 ## Done
+- Bug: Career.vue - sections are not next to each other when view not narrow/mobile
 - Refactor: One endpoint for login

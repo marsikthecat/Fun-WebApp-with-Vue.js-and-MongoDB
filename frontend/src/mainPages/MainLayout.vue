@@ -4,6 +4,7 @@ import {isPopupVisible, handlePopup, customPopup} from "../../assets/features.js
 import {onMounted, ref} from "vue";
 import {useRouter} from "vue-router";
 import {useApi} from "../composables/useApi.js";
+import WelcomeBubble from "../assets/globalFeatures/WelcomeBubble.vue";
 
 onMounted(() => {
   check();
@@ -37,6 +38,8 @@ async function logout() {
     const result = await api.logout(token);
     if (result.status === 200) {
       sessionStorage.removeItem("token");
+      sessionStorage.removeItem("username");
+      sessionStorage.removeItem("welcomeShown");
       customPopup("Logout successful!", "Marsik wants to say something to you: " + "See you later!", false);
       await router.push("/login");
     } else {
@@ -60,6 +63,8 @@ const links = [
 const drawer = ref(false)
 </script>
 <template>
+  <WelcomeBubble />
+  
   <v-app-bar color="primary" height="40">
     <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
     <v-spacer></v-spacer>

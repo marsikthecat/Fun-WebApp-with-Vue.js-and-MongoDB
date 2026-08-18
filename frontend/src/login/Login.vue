@@ -31,6 +31,8 @@ const login = async () => {
     const res = await api.login(loginState.userNameInput, loginState.passwordInput);
     if (res.status === 200) {
       sessionStorage.setItem("token", res.data.token);
+      sessionStorage.setItem("username", loginState.userNameInput);
+      sessionStorage.setItem("welcomeShown", "false");
       if (res.data.isAdmin) {
         await router.push("/admin");
       } else {
