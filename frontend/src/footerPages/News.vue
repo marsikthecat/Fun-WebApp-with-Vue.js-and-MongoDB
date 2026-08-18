@@ -1,173 +1,141 @@
 <template>
-  <div class="timeline">
-    <div class="container right">
-      <div class="content">
-        <h2> 21.11.2020 |<small> 12:15</small></h2>
-        <p> US President Trump's attempts to contest the election results in states where his challenger Joe Biden won remains unsuccessful.
-          Recounts in the US state of Georgia, among others, conclude that Biden was able to secure the majority of ballots there.
-          Elsewhere, lawsuits from Trump's campaign led nowhere. The incumbent US president continues to claim that the election was rigged and that he actually won.
-          Meanwhile, several Republicans are also calling for the transition phase to be initiated in order to clear the way for US President-elect Joe Biden to take office.</p>
-      </div>
-    </div>
-    <div class="container left">
-      <div class="content">
-        <h2> 21.11.2020 |<small> 12:00</small></h2>
-        <p>In Leipzig (Germany), the police are preparing for another large-scale demonstration by Corona skeptics. In the run-up to the so-called "Querdenken" demonstration, both
-          Right-wing extremists as well as left-wing extremists mobilized at counter-demonstrations. Both a stronger police presence and metal grilles and
-          Identity checks are intended to prevent attacks on press representatives and prevent riots, as well as non-compliance with the Corona rules.
-          The police are expecting several 1000 participants.</p>
-      </div>
-    </div>
-    <div class="container right">
-      <div class="content">
-        <h2> 21.11.2020 |<small> 11:30</small></h2>
-        <p> New corona infections in Germany are still at a very high level. The Robert Koch Institute reported 22964 new infections within 24 hours,
-          according to all health authorities.</p>
-      </div>
-    </div>
-    <div class="container left">
-      <div class="content">
-        <h2> 20.11.2020 |<small> 14:30</small></h2>
-        <p>After right-wing media activists who were allegedly infiltrated into the German Bundestag by 3 AFD deputies on Wednesday and there
-          have deliberately harassed members of parliament and in some cases invaded the offices of the members of parliament without authority, the
-          Bundestag debated in a current hour about this incident. The debate in the plenary hall showed fierce accusations against the AFD with
-          various accusations that they are acting undemocratically and ridiculing Parliament. The tone was particularly strong among the parliamentary group
-          of the CDU very hard. The AFD expressed apologies with the speech of the group chairman Alexander Gauland and rejected the allegations.
-          Gauland's speech, on the other hand, was described as "hypocrisy". In view of the incident on Wednesday, the head of the Bundestag is considering,
-          to take criminal action.</p>
-      </div>
-    </div>
-    <div class="container right">
-      <div class="content">
-        <h2> 20.11.2020 |<small> 7:30</small></h2>
-        <p>According to the Robert Koch Institute, the number of new corona infections in Germany has reached a new high. According to the information,
-          of all health authorities, 23,648 new infections were reported to the RKI within 24 hours throughout Germany.</p>
-      </div>
-    </div>
-  </div>
+  <v-container class="py-8">
+    <v-row class="mb-6">
+      <v-col>
+        <h1 class="text-h3 font-weight-bold mb-2">News Timeline</h1>
+        <v-divider class="my-4"></v-divider>
+      </v-col>
+    </v-row>
+
+    <v-timeline side="left" layout="dense" class="news-timeline">
+      <v-timeline-item
+        v-for="(item, index) in timelineItems"
+        :key="index"
+        :dot-color="item.color"
+        size="small"
+        class="mb-6"
+      >
+        <template v-slot:opposite>
+          <div class="text-caption font-weight-bold text-md-body2">
+            <div class="text-primary font-weight-bold">{{ item.date }}</div>
+            <div class="text-grey">{{ item.time }}</div>
+          </div>
+        </template>
+
+        <v-card 
+          class="news-card"
+          :class="`border-l-4 border-${item.color}`"
+          elevation="2"
+        >
+          <v-card-title class="pb-2">
+            <v-row no-gutters align="center" class="gap-2">
+              <v-icon :color="item.color" size="small">{{ item.icon }}</v-icon>
+              <span class="text-h6">{{ item.title }}</span>
+            </v-row>
+          </v-card-title>
+
+          <v-card-text class="text-body2 line-height-lg">
+            {{ item.content }}
+          </v-card-text>
+
+          <v-card-actions v-if="item.tags" class="pt-0">
+            <v-chip
+              v-for="tag in item.tags"
+              :key="tag"
+              size="small"
+              variant="outlined"
+              :color="item.color"
+              class="mr-2"
+            >
+              {{ tag }}
+            </v-chip>
+          </v-card-actions>
+        </v-card>
+      </v-timeline-item>
+    </v-timeline>
+  </v-container>
 </template>
 
-<script>
-export default {
-  name: "News"
-}
+<script setup>
+import { ref } from 'vue'
+
+const timelineItems = ref([
+  {
+    date: "21.11.2020",
+    time: "12:15",
+    title: "US Election Updates",
+    icon: "mdi-vote",
+    color: "blue",
+    content: "US President Trump's attempts to contest the election results in states where his challenger Joe Biden won remains unsuccessful. Recounts in the US state of Georgia, among others, conclude that Biden was able to secure the majority of ballots there. Elsewhere, lawsuits from Trump's campaign led nowhere. The incumbent US president continues to claim that the election was rigged and that he actually won. Meanwhile, several Republicans are also calling for the transition phase to be initiated in order to clear the way for US President-elect Joe Biden to take office.",
+    tags: ["Politics", "USA", "Election"]
+  },
+  {
+    date: "21.11.2020",
+    time: "12:00",
+    title: "Leipzig Demonstration Alert",
+    icon: "mdi-alert-circle",
+    color: "orange",
+    content: "In Leipzig (Germany), the police are preparing for another large-scale demonstration by Corona skeptics. In the run-up to the so-called 'Querdenken' demonstration, both right-wing extremists as well as left-wing extremists mobilized at counter-demonstrations. Both a stronger police presence and metal grilles and identity checks are intended to prevent attacks on press representatives and prevent riots, as well as non-compliance with the Corona rules. The police are expecting several 1000 participants.",
+    tags: ["Germany", "Security", "Protest"]
+  },
+  {
+    date: "21.11.2020",
+    time: "11:30",
+    title: "Corona Infection Report",
+    icon: "mdi-virus",
+    color: "red",
+    content: "New corona infections in Germany are still at a very high level. The Robert Koch Institute reported 22,964 new infections within 24 hours, according to all health authorities.",
+    tags: ["Health", "COVID-19", "Germany"]
+  },
+  {
+    date: "20.11.2020",
+    time: "14:30",
+    title: "Bundestag Security Incident",
+    icon: "mdi-shield-alert",
+    color: "purple",
+    content: "After right-wing media activists who were allegedly infiltrated into the German Bundestag by 3 AFD deputies on Wednesday and have deliberately harassed members of parliament and in some cases invaded the offices of the members of parliament without authority, the Bundestag debated in a current hour about this incident. The debate in the plenary hall showed fierce accusations against the AFD with various accusations that they are acting undemocratically and ridiculing Parliament. The AFD expressed apologies with the speech of the group chairman Alexander Gauland and rejected the allegations.",
+    tags: ["Politics", "Germany", "Security"]
+  },
+  {
+    date: "20.11.2020",
+    time: "07:30",
+    title: "Record Corona Cases",
+    icon: "mdi-chart-line",
+    color: "red",
+    content: "According to the Robert Koch Institute, the number of new corona infections in Germany has reached a new high. According to the information of all health authorities, 23,648 new infections were reported to the RKI within 24 hours throughout Germany.",
+    tags: ["Health", "COVID-19", "Statistics"]
+  }
+])
 </script>
 
 <style scoped>
-*
-{
-  box-sizing: border-box;
+.news-timeline {
+  padding: 20px 0;
 }
-.timeline
-{
-  background: beige;
-  position: relative;
+
+.news-card {
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  border-left: 4px solid;
 }
-.timeline::after
-{
-  content: '';
-  position: absolute;
-  width: 8px;
-  background-color: #fdc3c3;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  margin-left: -3px;
+
+.news-card:hover {
+  elevation: 4;
+  transform: translateY(-2px);
 }
-.container
-{
-  padding: 15px;
-  position: relative;
-  width: 50%;
+
+.line-height-lg {
+  line-height: 1.6;
+  letter-spacing: 0.3px;
 }
-.container::after
-{
-  content: '';
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  right: -15px;
-  background-color: white;
-  border: 4px solid #FF9F55;
-  top: 15px;
-  border-radius: 50%;
-  z-index: 1;
+
+:deep(.v-timeline-item__dot) {
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.8);
 }
-.left
-{
-  left: 0;
-}
-.right
-{
-  left: 50%;
-}
-.left::before
-{
-  content: " ";
-  height: 0;
-  position: absolute;
-  top: 22px;
-  width: 0;
-  z-index: 1;
-  right: 30px;
-  border-width: 10px 0 10px 10px;
-  border-color: transparent transparent transparent white;
-}
-.right::before
-{
-  content: " ";
-  height: 0;
-  position: absolute;
-  top: 22px;
-  width: 0;
-  z-index: 1;
-  left: 30px;
-  border-width: 10px 10px 10px 0;
-  border-color: transparent white transparent transparent;
-}
-.right::after
-{
-  left: -13px;
-}
-.content
-{
-  font-size: 0.85em;
-  padding: 5px 10px;
-  background-color: #cdfcff;
-  border-radius: 6px;
-  box-shadow: 3px 3px 10px -2px;
-}
-@media screen and (max-width: 750px)
-{
-  .timeline::after
-  {
-    left: 25px;
-    margin-left: 0;
-  }
-  .container
-  {
-    width: 100%;
-    padding-left: 50px;
-    padding-right: 15px;
-  }
-  .left::after, .right::after
-  {
-    left: 15px;
-  }
-  .right
-  {
-    left: 0;
-  }
-  body
-  {
-    font-size: 90%;
-  }
-}
-@media screen and (max-width: 450px)
-{
-  body
-  {
-    font-size: 70%;
+
+@media (max-width: 960px) {
+  :deep(.v-timeline) {
+    padding-left: 0;
   }
 }
 </style>
