@@ -28,7 +28,7 @@ const addQuestionDialog = ref(false);
 const deleteQuestionDialog = ref(false);
 
 onMounted(async () => {
-  const token = sessionStorage.getItem("admin-token");
+  const token = sessionStorage.getItem("token");
   if (token === null) {
     await router.push("/unauthorised");
     return;

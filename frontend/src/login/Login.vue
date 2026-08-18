@@ -1,5 +1,5 @@
 <script setup>
-import {ref} from "vue";
+import {reactive, ref} from "vue";
 import {useRouter} from "vue-router";
 import {customPopup} from "../../assets/features.js";
 import SnackBar from "../../assets/globalFeatures/SnackBar.vue"
@@ -10,52 +10,46 @@ const api = useApi();
 
 const router = useRouter();
 
-const userNameInput = ref('');
-const passwordInput = ref('');
+const loginState = reactive({
+  userNameInput: '',
+  passwordInput: '',
+  passwordHidden: true
+})
 
-const newUserNameInput = ref('');
-const newPasswordInput = ref('');
-const newPasswordInputConfirmed = ref('');
-const furBallAccepted = ref(false);
-
+const signUpState = reactive({
+  newUserNameInput: '',
+  newPasswordInput: '',
+  newPasswordInputConfirmed: '',
+  furBallAccepted: false,
+  passwordHidden: true,
+  passwordConfirmedHidden: true
+})
 const modelVisible = ref(false);
 
-const passwordHidden = ref(true);
-
-const signInpasswordHidden = ref(true);
-const signInpasswordConfirmedHidden = ref(true);
-
 const login = async () => {
-  // Only for entering admin-panel easier for development!
-  if (userNameInput.value === "admin-marsik") {
-    try {
-      const res = await api.adminLogin(userNameInput.value, passwordInput.value);
-      if (res.status === 200) {
-        sessionStorage.setItem("admin-token", res.data);
-        await router.push("/admin")
-      }
-    } catch (err) {
-      snackBar.value.pushSnackBar("Admin Login failed", "error")
-    }
-    return;
-  }
   try {
-    const res = await api.login(userNameInput.value, passwordInput.value);
-    sessionStorage.setItem("token", res.data);
-    await router.push('/main/home');
+    const res = await api.login(loginState.userNameInput, loginState.passwordInput);
+    if (res.status === 200) {
+      sessionStorage.setItem("token", res.data.token);
+      if (res.data.isAdmin) {
+        await router.push("/admin");
+      } else {
+        await router.push('/main/home');
+      }
+    }
   } catch (error) {
     snackBar.value.pushSnackBar("Login failed: " + error.message, "error");
   }
 }
 
 const submit = async () =>  {
-  if (!furBallAccepted.value) {
+  if (!signUpState.furBallAccepted) {
     snackBar.value.pushSnackBar("Sign up failed: You need to allow Marsik to be a fur ball", "error");
     customPopup("Fatal Error", "Sign up failed: You need to allow Marsik to be a fur ball", true );
     return;
   }
-  const username = newUserNameInput.value;
-  const password = newPasswordInput.value;
+  const username = signUpState.newUserNameInput;
+  const password = signUpState.newPasswordInput;
     try {
       await api.register(username, password);
       snackBar.value.pushSnackBar("Sign up successful. Welcome " + username, "success")
@@ -94,7 +88,7 @@ const passwordInputRules = [
       if (!/(?=.*[^A-Za-z0-9])/.test(newPasswordInput)) {
         return 'Your password needs at least one special character'
       }
-      if (newPasswordInput !== newPasswordInputConfirmed.value) {
+      if (newPasswordInput !== signUpState.newPasswordInputConfirmed) {
         return 'Password and repeated Password are not equal'
       }
       submit();
@@ -109,10 +103,11 @@ const passwordInputRules = [
     <div id="container">
       <h2>Are you ready for Marsik?</h2>
         <v-form>
-          <v-text-field v-model="userNameInput" label="Your Name" autocomplete="username"></v-text-field>
-          <v-text-field :append-inner-icon="passwordHidden ? 'mdi-eye-off' : 'mdi-eye' " :type="passwordHidden ? 'password' : 'text' "
-                        v-model="passwordInput" label="Your Password" autocomplete="current-password"
-                        @click:append-inner="passwordHidden = !passwordHidden"></v-text-field>
+          <v-text-field v-model="loginState.userNameInput" label="Your Name" autocomplete="username"></v-text-field>
+          <v-text-field :append-inner-icon="loginState.passwordHidden ? 'mdi-eye-off' : 'mdi-eye' " 
+            :type="loginState.passwordHidden ? 'password' : 'text' " v-model="loginState.passwordInput" 
+            label="Your Password" autocomplete="current-password"
+             @click:append-inner="loginState.passwordHidden = !loginState.passwordHidden"></v-text-field>
           <v-btn @click="login()" text="Login"></v-btn>
         </v-form>
         <v-card-text class="text-center">
@@ -129,16 +124,16 @@ const passwordInputRules = [
           <hr>
           <v-sheet>
             <v-form @submit.prevent validate-on="submit lazy">
-              <v-text-field :rules="userNameInputRules" v-model="newUserNameInput" label="Enter your name"></v-text-field>
-              <v-text-field :rules="passwordInputRules" v-model="newPasswordInput" label="Enter your Password"
-                            :append-inner-icon="signInpasswordHidden ? 'mdi-eye-off' : 'mdi-eye' "
-                            :type="signInpasswordHidden ? 'password' : 'text' "
-                            @click:append-inner="signInpasswordHidden = !signInpasswordHidden"></v-text-field>
-              <v-text-field v-model="newPasswordInputConfirmed" label="Repeat your Password"
-                            :append-inner-icon="signInpasswordConfirmedHidden ? 'mdi-eye-off' : 'mdi-eye' "
-                            :type="signInpasswordConfirmedHidden ? 'password' : 'text' "
-                            @click:append-inner="signInpasswordConfirmedHidden = !signInpasswordConfirmedHidden"></v-text-field>
-              <v-checkbox color="primary" v-model="furBallAccepted" label="By creating an account you allow Marsik the Cat to be a fur ball"></v-checkbox>
+              <v-text-field :rules="userNameInputRules" v-model="signUpState.newUserNameInput" label="Enter your name"></v-text-field>
+              <v-text-field :rules="passwordInputRules" v-model="signUpState.newPasswordInput" label="Enter your Password"
+                            :append-inner-icon="signUpState.passwordHidden ? 'mdi-eye-off' : 'mdi-eye' "
+                            :type="signUpState.passwordHidden ? 'password' : 'text' "
+                            @click:append-inner="signUpState.passwordHidden = !signUpState.passwordHidden"></v-text-field>
+              <v-text-field v-model="signUpState.newPasswordInputConfirmed" label="Repeat your Password"
+                            :append-inner-icon="signUpState.passwordConfirmedHidden ? 'mdi-eye-off' : 'mdi-eye' "
+                            :type="signUpState.passwordConfirmedHidden ? 'password' : 'text' "
+                            @click:append-inner="signUpState.passwordConfirmedHidden = !signUpState.passwordConfirmedHidden"></v-text-field>
+              <v-checkbox color="primary" v-model="signUpState.furBallAccepted" label="By creating an account you allow Marsik the Cat to be a fur ball"></v-checkbox>
               <v-btn text="Sign up" type="submit" class="mb-3"></v-btn>
             </v-form>
           </v-sheet>

@@ -1,5 +1,10 @@
 package org.example.backend.service;
 
+import java.security.MessageDigest;
+import java.util.Base64;
+import java.util.List;
+import javax.crypto.SecretKey;
+import org.example.backend.LoginResult;
 import org.example.backend.SafetyCat;
 import org.example.backend.TokenManager;
 import org.example.backend.model.User;
@@ -7,10 +12,6 @@ import org.example.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
-import javax.crypto.SecretKey;
-import java.security.MessageDigest;
-import java.util.Base64;
-import java.util.List;
 
 @Service
 public class UserService {
@@ -71,28 +72,27 @@ public class UserService {
           if (MessageDigest.isEqual(encryptedInputPassword, encryptedPassword)) {
             return user;
           }
-        } catch (Exception e) {
-          System.out.println(e.getMessage());
-        }
+        } catch (Exception _) {}
       }
     }
     return null;
   }
 
-  public String login(@RequestBody User user) {
+  public LoginResult login(@RequestBody User user) {
+    if (isAdmin(user.getName(), user.getPassword())) {
+      String token = TokenManager.setToken(TOKEN_SIZE);
+      return new LoginResult(token, true);
+    }
     User u = isUserRegistered(user.getName(), user.getPassword());
     if (u != null) {
-      return TokenManager.setToken(TOKEN_SIZE);
+      String token = TokenManager.setToken(TOKEN_SIZE);
+      return new LoginResult(token, false);
     } else {
-      return "";
+      return new LoginResult("", false);
     }
   }
 
-  public String adminLogin(@RequestBody User user) {
-    if (user.getName().equals(admin_username) && user.getPassword().equals(admin_password)) {
-      return TokenManager.setToken(TOKEN_SIZE);
-    } else {
-      return "";
-    }
+  public boolean isAdmin(String username, String password) {
+    return username.equals(admin_username) && password.equals(admin_password);
   }
 }

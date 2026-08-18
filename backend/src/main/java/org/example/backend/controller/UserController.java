@@ -1,12 +1,21 @@
 package org.example.backend.controller;
 
+import java.util.List;
+import java.util.Map;
+
+import org.example.backend.LoginResult;
 import org.example.backend.TokenManager;
 import org.example.backend.model.User;
 import org.example.backend.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import java.util.List;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/users")
@@ -39,21 +48,14 @@ public class UserController {
 
   @PostMapping("/login")
   public ResponseEntity<?> login(@RequestBody User user) {
-    String token = userService.login(user);
-    if (token.isEmpty()) {
+    LoginResult loginResult = userService.login(user);
+    if (loginResult.token().isEmpty()) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
-    return ResponseEntity.status(HttpStatus.OK).body(token);
-  }
-
-  @PostMapping("/admin-login")
-  public ResponseEntity<?> adminLogin(@RequestBody User user) {
-    String token = userService.adminLogin(user);
-    if (token.isEmpty()) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(token);
-    } else {
-      return ResponseEntity.status(HttpStatus.OK).body(token);
-    }
+    return ResponseEntity.status(HttpStatus.OK).body(Map.of(
+      "token", loginResult.token(),
+      "isAdmin", loginResult.isAdmin()
+    ));
   }
 
   @PostMapping("/logout")
