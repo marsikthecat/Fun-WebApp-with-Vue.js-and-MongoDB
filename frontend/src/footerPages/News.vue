@@ -6,7 +6,7 @@
       </v-col>
     </v-row>
 
-    <v-timeline side="left" layout="dense" class="news-timeline">
+    <v-timeline side="end" layout="dense" class="news-timeline">
       <v-timeline-item
         v-for="(item, index) in timelineItems"
         :key="index"
