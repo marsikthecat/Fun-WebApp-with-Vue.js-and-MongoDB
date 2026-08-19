@@ -4,6 +4,7 @@ import {useRouter} from "vue-router";
 import {customPopup} from "../../assets/features.js";
 import SnackBar from "../../assets/globalFeatures/SnackBar.vue"
 import {useApi} from "../composables/useApi.js";
+import LoginFields from "./LoginFields.vue";
 
 const snackBar = ref()
 const api = useApi();
@@ -105,11 +106,13 @@ const passwordInputRules = [
     <div id="container">
       <h2>Are you ready for Marsik?</h2>
         <v-form>
-          <v-text-field v-model="loginState.userNameInput" label="Your Name" autocomplete="username"></v-text-field>
-          <v-text-field :append-inner-icon="loginState.passwordHidden ? 'mdi-eye-off' : 'mdi-eye' " 
-            :type="loginState.passwordHidden ? 'password' : 'text' " v-model="loginState.passwordInput" 
-            label="Your Password" autocomplete="current-password"
-             @click:append-inner="loginState.passwordHidden = !loginState.passwordHidden"></v-text-field>
+          <LoginFields
+            mode="login"
+            :login-state="loginState"
+            :sign-up-state="signUpState"
+            :user-name-input-rules="userNameInputRules"
+            :password-input-rules="passwordInputRules"
+          />
           <v-btn @click="login()" text="Login"></v-btn>
         </v-form>
         <v-card-text class="text-center">
@@ -126,15 +129,13 @@ const passwordInputRules = [
           <hr>
           <v-sheet>
             <v-form @submit.prevent validate-on="submit lazy">
-              <v-text-field :rules="userNameInputRules" v-model="signUpState.newUserNameInput" label="Enter your name"></v-text-field>
-              <v-text-field :rules="passwordInputRules" v-model="signUpState.newPasswordInput" label="Enter your Password"
-                            :append-inner-icon="signUpState.passwordHidden ? 'mdi-eye-off' : 'mdi-eye' "
-                            :type="signUpState.passwordHidden ? 'password' : 'text' "
-                            @click:append-inner="signUpState.passwordHidden = !signUpState.passwordHidden"></v-text-field>
-              <v-text-field v-model="signUpState.newPasswordInputConfirmed" label="Repeat your Password"
-                            :append-inner-icon="signUpState.passwordConfirmedHidden ? 'mdi-eye-off' : 'mdi-eye' "
-                            :type="signUpState.passwordConfirmedHidden ? 'password' : 'text' "
-                            @click:append-inner="signUpState.passwordConfirmedHidden = !signUpState.passwordConfirmedHidden"></v-text-field>
+              <LoginFields
+                mode="signup"
+                :login-state="loginState"
+                :sign-up-state="signUpState"
+                :user-name-input-rules="userNameInputRules"
+                :password-input-rules="passwordInputRules"
+              />
               <v-checkbox color="primary" v-model="signUpState.furBallAccepted" label="By creating an account you allow Marsik the Cat to be a fur ball"></v-checkbox>
               <v-btn text="Sign up" type="submit" class="mb-3"></v-btn>
             </v-form>
