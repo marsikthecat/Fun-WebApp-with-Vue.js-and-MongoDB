@@ -1,10 +1,10 @@
 <script setup>
 import "../../assets/styles.css";
-import {isPopupVisible, handlePopup, customPopup} from "../../assets/features.js";
+import {customPopup} from "../../assets/features.js";
 import {onMounted, ref} from "vue";
 import {useRouter} from "vue-router";
 import {useApi} from "../composables/useApi.js";
-import WelcomeBubble from "../assets/globalFeatures/WelcomeBubble.vue";
+import WelcomeBubble from "../../assets/WelcomeBubble.vue";
 
 onMounted(() => {
   check();
@@ -79,14 +79,6 @@ const drawer = ref(false)
       <v-list-item title="Chat" to="chat"></v-list-item>
     </v-list>
   </v-navigation-drawer>
-
-  <transition name="popup">
-    <div id="popup" v-if="isPopupVisible">
-      <h2> The following message appears:</h2>
-      <p> Sorry, the link is not available at the moment! </p>
-      <button @click="handlePopup(false)">Ok</button>
-    </div>
-  </transition>
 
   <div id="global">
     <audio ref="audioPlayer" src="/audio/meow.mp4"></audio>
