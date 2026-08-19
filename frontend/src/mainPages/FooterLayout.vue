@@ -1,31 +1,13 @@
 <script setup>
 import "../../assets/styles.css";
 import {onMounted} from "vue";
-import {useRouter} from "vue-router";
-import {useApi} from "../composables/useApi.js";
+import {useAuth} from "../composables/useAuth.js";
 
-onMounted(() => {
-  check();
+onMounted(async () => {
+  await check();
 });
 
-const api = useApi();
-const router = useRouter();
-
-async function check() {
-  const token = sessionStorage.getItem("token");
-  if (token === null) {
-    await router.push("/unauthorised");
-    return;
-  }
-  try {
-    const result = await api.checkUser(token);
-    if (result.status === 403) {
-      await router.push("/unauthorised");
-    }
-  } catch (e) {
-    await router.push("/unauthorised");
-  }
-}
+const {check} = useAuth();
 
 const links = [
   { name: "Privacy Policy", href: "/privacy" },

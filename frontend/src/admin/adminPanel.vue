@@ -1,11 +1,12 @@
 <script setup>
 import {onMounted, ref} from "vue";
-import router from "../router/router.js";
 import SnackBar from "../../assets/globalFeatures/SnackBar.vue";
 import {useApi} from "../composables/useApi.js";
+import {useAuth} from "../composables/useAuth.js";
 
 const snackBar = ref();
 const api = useApi();
+const {check} = useAuth();
 
 const users = ref([]);
 const messagesList = ref([]);
@@ -28,24 +29,17 @@ const addQuestionDialog = ref(false);
 const deleteQuestionDialog = ref(false);
 
 onMounted(async () => {
-  const token = sessionStorage.getItem("token");
-  if (token === null) {
-    await router.push("/unauthorised");
-    return;
-  }
-  try {
-    const result = await api.checkUser(token);
-    if (result.status === 403) {
-      await router.push("/unauthorised");
+  const auth = await check();
+  if (!auth.authorized) {
+    if (auth.error) {
+      snackBar.value.pushSnackBar("Big Fatal Error:" + auth.error, "error");
     }
-  } catch (e) {
-    snackBar.value.pushSnackBar("Big Fatal Error:" + e, "error");
-    await router.push("/unauthorised");
+    return;
   }
 
   try {
     const [userFetch, messagesFetch, quizListFetch] = await Promise.all([
-      api.getUsers(token),
+      api.getUsers(auth.token),
       api.getMessages(), // TODO: auth for this point
       api.getQuiz(),
     ])

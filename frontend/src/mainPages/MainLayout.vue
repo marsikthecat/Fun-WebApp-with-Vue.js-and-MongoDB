@@ -4,30 +4,19 @@ import {customPopup} from "../../assets/features.js";
 import {onMounted, ref} from "vue";
 import {useRouter} from "vue-router";
 import {useApi} from "../composables/useApi.js";
+import {useAuth} from "../composables/useAuth.js";
 import WelcomeBubble from "../../assets/WelcomeBubble.vue";
 
-onMounted(() => {
-  check();
+onMounted(async () => {
+  const auth = await check();
+  if (!auth.authorized && auth.error) {
+    customPopup("Big Fatal Error:", auth.error, true);
+  }
 });
 
 const api = useApi();
 const router = useRouter();
-async function check() {
-  const token = sessionStorage.getItem("token");
-  if (token === null) {
-    await router.push("/unauthorised");
-    return;
-  }
-  try {
-    const result = await api.checkUser(token);
-    if (result.status === 403) {
-      await router.push("/unauthorised");
-    }
-  } catch (e) {
-    customPopup("Big Fatal Error:", e, true);
-    await router.push("/unauthorised");
-  }
-}
+const {check} = useAuth();
 async function logout() {
   const token = sessionStorage.getItem("token");
   if (token === null) {

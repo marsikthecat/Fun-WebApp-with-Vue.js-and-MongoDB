@@ -8,10 +8,10 @@
 - Rename: Rename all assets like images and videos so their purpose is clear
 
 ## In Progress
-- Refactor: seperate useAuth hook
 - Fix: Timeline style and overflow
 
 ## Done
+- Refactor: seperate useAuth hook
 - Refactor: Move common/repeating UI-components in separate file to reduce redundancy e.g. textfields
 - Feat: Improve error and notification popups
 - Wrap footer content in mainlayout
