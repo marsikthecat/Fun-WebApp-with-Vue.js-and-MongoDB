@@ -29,7 +29,7 @@ async function logout() {
       sessionStorage.removeItem("token");
       sessionStorage.removeItem("username");
       sessionStorage.removeItem("welcomeShown");
-      customPopup("Logout successful!", "Marsik wants to say something to you: " + "See you later!", false);
+      sessionStorage.setItem("logoutMessage", "Bye bye! See you later.");
       await router.push("/login");
     } else {
       customPopup("Error: ", "Logout-token not valid", true);

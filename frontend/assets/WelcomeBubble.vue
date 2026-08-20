@@ -5,7 +5,7 @@
         <div class="bubble-tail"></div>
         <div class="bubble-content">
           <v-icon class="bubble-icon" color="primary" size="x-large">mdi-hand-wave</v-icon>
-          <p class="bubble-text">Welcome back, <strong>{{ username }}</strong>!</p>
+          <p class="bubble-text">{{ message }}</p>
         </div>
       </div>
     </div>
@@ -17,14 +17,18 @@ import { ref, onMounted } from 'vue'
 
 const showBubble = ref(false)
 const username = ref('')
+const message = ref('')
 
 onMounted(() => {
   const welcomeShown = sessionStorage.getItem('welcomeShown')
+  const logoutMessage = sessionStorage.getItem('logoutMessage')
   
   if (welcomeShown !== 'true') {
     username.value = sessionStorage.getItem('username') || 'Friend'
+    message.value = logoutMessage || `Welcome back, ${username.value}!`
     showBubble.value = true
     sessionStorage.setItem('welcomeShown', 'true')
+    sessionStorage.removeItem('logoutMessage')
     
     // Auto-hide after 4 seconds
     setTimeout(() => {
@@ -46,18 +50,19 @@ onMounted(() => {
 
 .welcome-bubble 
 {
-  display: flex;
-  align-items: flex-end;
-  gap: 10px;
+  position: relative;
   animation: slideUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
 .bubble-tail 
 {
+  position: absolute;
+  right: 24px;
+  bottom: -15px;
   width: 0;
   height: 0;
   border-left: 12px solid transparent;
-  border-right: 0px solid transparent;
+  border-right: 12px solid transparent;
   border-top: 15px solid white;
   animation: tailAppear 0.3s ease-out 0.2s forwards;
   opacity: 0;

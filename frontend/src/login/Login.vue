@@ -5,6 +5,7 @@ import {customPopup} from "../../assets/features.js";
 import SnackBar from "../../assets/globalFeatures/SnackBar.vue"
 import {useApi} from "../composables/useApi.js";
 import LoginFields from "./LoginFields.vue";
+import WelcomeBubble from "../../assets/WelcomeBubble.vue";
 
 const snackBar = ref()
 const api = useApi();
@@ -102,6 +103,7 @@ const passwordInputRules = [
 
 <template>
   <div id="global">
+    <WelcomeBubble />
     <SnackBar ref="snackBar" />
     <div id="container">
       <h2>Are you ready for Marsik?</h2>
