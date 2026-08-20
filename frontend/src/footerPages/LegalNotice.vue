@@ -53,12 +53,19 @@ export default {
   background-color: rgb(225, 225, 225);
   padding: 10px 10px 10px 20px;
   opacity: 0;
-  scale: 0.8;
-  transition: all 1.5s ease-in-out;
+  transform: translateY(18px) scale(0.96);
+  transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .show
 {
   opacity: 1;
-  scale: 1;
+  transform: translateY(0) scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tag {
+    transition: none;
+    transform: none;
+  }
 }
 </style>

@@ -3,7 +3,6 @@
 
 ## Open
 - Feat: Star-animation in Service.vue when hovering the green button
-- Feat: Animate simple content, for example with fade-in, such as the footer content
 - Refactor: Compress size of the three videos
 - Rename: Rename all assets like images and videos so their purpose is clear
 
@@ -11,6 +10,7 @@
 - Fix: Timeline style and overflow
 
 ## Done
+- Fix: Animate legal notice content better
 - Feat: After successful logout, instead of dialog, bye bye bubble
 - Fix: Welcome bubble is weird
 - Fix: Backend auth for fetching questions and messages
