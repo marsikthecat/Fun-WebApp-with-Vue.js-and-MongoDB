@@ -2,8 +2,10 @@
 import {computed, onMounted, ref} from "vue";
 import {customPopup} from "../../assets/features.js";
 import {useApi} from "../composables/useApi.js";
+import {useAuth} from "../composables/useAuth.js";
 
 const api = useApi();
+const {check} = useAuth();
 const questionList = ref([]);
 const index = ref(0);
 const correctAnswers = ref(0);
@@ -20,7 +22,11 @@ const finished = ref(false)
 
 onMounted(async () => {
     try {
-      const questionRequest = await api.getQuiz();
+      const auth = await check();
+      if (!auth.authorized) {
+        return;
+      }
+      const questionRequest = await api.getQuiz(auth.token);
       questionList.value = questionRequest.data;
     } catch (e) {
       customPopup("Fatal error", e, true);

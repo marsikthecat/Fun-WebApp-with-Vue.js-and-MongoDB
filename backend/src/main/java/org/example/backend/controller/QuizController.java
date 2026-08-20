@@ -1,6 +1,7 @@
 package org.example.backend.controller;
 
 import java.util.List;
+import org.example.backend.TokenManager;
 import org.example.backend.model.QuizQuestion;
 import org.example.backend.service.QuizService;
 import org.springframework.http.HttpStatus;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +28,10 @@ public class QuizController {
   }
 
   @GetMapping
-  public ResponseEntity<?> getAllQuestions() {
+  public ResponseEntity<?> getAllQuestions(@RequestHeader("Authorization") String token) {
+    if (!TokenManager.exists(token)) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
     List<QuizQuestion> questionList = quizService.getAllQuestions();
     return ResponseEntity.status(HttpStatus.OK).body(questionList);
   }

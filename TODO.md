@@ -6,11 +6,14 @@
 - Feat: Animate simple content, for example with fade-in, such as the footer content
 - Refactor: Compress size of the three videos
 - Rename: Rename all assets like images and videos so their purpose is clear
+- Fix: Welcome bubble is weird
 
 ## In Progress
+
 - Fix: Timeline style and overflow
 
 ## Done
+- Fix: Backend auth for fetching questions and messages
 - Refactor: seperate useAuth hook
 - Refactor: Move common/repeating UI-components in separate file to reduce redundancy e.g. textfields
 - Feat: Improve error and notification popups

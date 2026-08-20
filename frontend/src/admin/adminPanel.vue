@@ -40,8 +40,8 @@ onMounted(async () => {
   try {
     const [userFetch, messagesFetch, quizListFetch] = await Promise.all([
       api.getUsers(auth.token),
-      api.getMessages(), // TODO: auth for this point
-      api.getQuiz(),
+      api.getMessages(auth.token),
+      api.getQuiz(auth.token),
     ])
     users.value = userFetch.data;
     messagesList.value = messagesFetch.data;

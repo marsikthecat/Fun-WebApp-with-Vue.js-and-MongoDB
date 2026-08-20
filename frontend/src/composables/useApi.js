@@ -30,14 +30,14 @@ export function useApi() {
     getUsers(token) {
       return api.get("/users", authHeader(token));
     },
-    getMessages() {
-      return api.get("/message");
+    getMessages(token) {
+      return api.get("/message", authHeader(token));
     },
     sendMessage(message) {
       return api.post("/message/send", message);
     },
-    getQuiz() {
-      return api.get("/quiz");
+    getQuiz(token) {
+      return api.get("/quiz", authHeader(token));
     },
     deleteQuizQuestion(questionID) {
       return api.delete("/quiz/deleteQuestion", {params: {questionID}});
