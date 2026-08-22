@@ -18,6 +18,7 @@ const responses = {
 };
 const response = ref('');
 const containerColor = computed(() => responses[response.value]);
+const quizStarted = ref(false);
 const finished = ref(false)
 
 onMounted(async () => {
@@ -41,26 +42,32 @@ const evaluate = (b) => {
     if (index.value >= questionList.value.length - 1) {
       response.value = "Game finished";
       finished.value = true;
-      customPopup("Game finished",
-          "You got " + correctAnswers.value + " out of " + questionList.value.length + " correct!",
-          false);
     } else {
       index.value++;
       response.value = "";
     }
   }, 2000)
 }
-const restartGame = () => {
-  finished.value = false;
+const startQuiz = () => {
+  quizStarted.value = true;
   index.value = 0;
+  correctAnswers.value = 0;
   response.value = "";
+  finished.value = false;
+}
+const restartGame = () => {
+  startQuiz();
 }
 </script>
 
 <template>
   <h2>Quiz</h2>
-  <div class="container" v-if="questionList.length !== 0" :style="{backgroundColor: containerColor }">
-    <div id="question-container" class="hide">
+  <div class="quiz-intro" v-if="questionList.length !== 0 && !quizStarted">
+    <p>Ready to test your Marsik knowledge?</p>
+    <button class="start-btn" @click="startQuiz">Start quiz</button>
+  </div>
+  <div class="container" v-if="questionList.length !== 0 && quizStarted" :style="{backgroundColor: containerColor }">
+    <div v-if="!finished" id="question-container">
       <h3 id="question" v-text="questionList[index].question" ></h3>
       <div id="answer-buttons" class="btn-grid">
         <button class="btn" v-for="(option, i) in questionList[index].options" :key="i"
@@ -69,7 +76,11 @@ const restartGame = () => {
       </div>
       <h2 id="notification" v-text="response"></h2>
     </div>
-      <button id="restart-btn" v-if="finished" @click="restartGame">Try again</button>
+    <div v-else class="result-panel">
+      <h3>Quiz complete!</h3>
+      <p>You got <strong>{{ correctAnswers }}</strong> out of <strong>{{ questionList.length }}</strong> correct.</p>
+      <button id="restart-btn" @click="restartGame">Try again</button>
+    </div>
   </div>
 </template>
 
@@ -83,6 +94,26 @@ export default {
 .container
 {
   text-align: center;
+  padding: 28px 20px;
+}
+.quiz-intro
+{
+  text-align: center;
+  padding: 30px 20px;
+  height: 300px;
+}
+.start-btn
+{
+  border: none;
+  padding: 12px 28px;
+  border-radius: 6px;
+  color: white;
+  background-color: #198620;
+  font-size: 1.2em;
+}
+.result-panel
+{
+  padding: 30px 20px;
 }
 .btn
 {

@@ -1,15 +1,14 @@
 ## Ideas/to be considered
 
 ## Open
+- Fix: Timeline style and overflow
 - Auth should also check for role, not just for key if user is admin
-- Feat: Animations in Quiz.vue
-- Feat: Start button "start quiz" before the quiz starts
 
 ## In Progress
 - Refactor: Compress size of the three videos
-- Fix: Timeline style and overflow
 
 ## Done
+- Feat: Start button "start quiz" before the quiz starts
 - Rename: Rename all assets like images and videos so their purpose is clear
 - Fix: Animate legal notice content better
 - Feat: After successful logout, instead of dialog, bye bye bubble
