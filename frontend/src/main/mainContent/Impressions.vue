@@ -1,12 +1,12 @@
 <script setup>
 import {onMounted, onUnmounted, ref, shallowRef, watchEffect} from "vue";
 const images = ref([
-  "/graphicComponents/pictures/20150814_120245.jpg",
-  "/graphicComponents/pictures/20150828_120900.jpg",
-  "/graphicComponents/pictures/20150814_120317.jpg",
-  "/graphicComponents/pictures/20150828_120939.jpg",
-  "/graphicComponents/pictures/255.jpg",
-  "/graphicComponents/pictures/254.jpg"
+  "/graphicComponents/main/impression1.jpg",
+  "/graphicComponents/main/impression2.jpg",
+  "/graphicComponents/main/impression3.jpg",
+  "/graphicComponents/main/impression4.jpg",
+  "/graphicComponents/main/impression5.jpg",
+  "/graphicComponents/main/impression6.jpg"
 ]);
 
 const i = ref(0);
@@ -26,23 +26,23 @@ watchEffect(() => {
 
 const gallery = [
   {
-    src: "/graphicComponents/pictures/supergalerie1.jpg",
+    src: "/graphicComponents/main/supergalerie1.jpg",
     label: "Marsik is a night-cat"
   },
   {
-    src: "/graphicComponents/pictures/supergalerie2.jpg",
+    src: "/graphicComponents/main/supergalerie2.jpg",
     label: "Marsik the hidden fir tree kitten"
   },
   {
-    src: "/graphicComponents/pictures/supergalerie3.jpg",
+    src: "/graphicComponents/main/supergalerie3.jpg",
     label: "Marsik lies like a corpse"
   },
   {
-    src: "/graphicComponents/pictures/supergalerie4.jpg",
+    src: "/graphicComponents/main/supergalerie4.jpg",
     label: "Marsik wants to poop"
   },
   {
-    src: "/graphicComponents/pictures/supergalerie5.jpg",
+    src: "/graphicComponents/main/supergalerie5.jpg",
     label: "Marsik wants something from you"
   }
 ]

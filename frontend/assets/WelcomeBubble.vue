@@ -22,8 +22,9 @@ const message = ref('')
 onMounted(() => {
   const welcomeShown = sessionStorage.getItem('welcomeShown')
   const logoutMessage = sessionStorage.getItem('logoutMessage')
+  const isLoggedIn = sessionStorage.getItem('token') !== null
   
-  if (welcomeShown !== 'true') {
+  if (logoutMessage || (isLoggedIn && welcomeShown !== 'true')) {
     username.value = sessionStorage.getItem('username') || 'Friend'
     message.value = logoutMessage || `Welcome back, ${username.value}!`
     showBubble.value = true

@@ -2,7 +2,7 @@
   <h2>Career</h2>
   <div class="card">
     <h3> Shape your Future and become an slave of Marsik the kitty:</h3>
-    <img src="/graphicComponents/footer/Stellenangebot.jpg" alt="careerPicture">
+    <img src="/graphicComponents/footer/careerCat.jpg" alt="careerPicture">
     <p class="title"> We are desperately searching a: <br><b> Cat Litter Box Management Specialist</b> </p>
     <button @click="customPopup('Fatal error:', 'Could not find a job', true)">Apply now</button>
   </div>
@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import {customPopup} from "../../assets/features.js";
+import {customPopup} from "../../../assets/features.js";
 
 export default {
   name: "Career",

@@ -1,6 +1,6 @@
 <script setup>
-import {onMounted, onUnmounted, reactive, ref} from "vue";
-import {customPopup} from "../../assets/features.js";
+import {onMounted, onUnmounted, ref} from "vue";
+import {customPopup} from "../../../assets/features.js";
 
 onMounted(() => {
   customPopup("Important", "In order to receive important Information about the" +

@@ -1,17 +1,17 @@
 <script setup>
 import {onMounted, onUnmounted, ref} from "vue";
 const images = [
-  "/graphicComponents/pictures/home-slider1.jpg",
-  "/graphicComponents/pictures/home-slider2.jpg",
-  "/graphicComponents/pictures/home-slider3.jpg",
-  "/graphicComponents/pictures/home-slider4.jpg",
+  "/graphicComponents/main/home-slider1.jpg",
+  "/graphicComponents/main/home-slider2.jpg",
+  "/graphicComponents/main/home-slider3.jpg",
+  "/graphicComponents/main/home-slider4.jpg",
 ]
 const childhoodImages = [
-  "/graphicComponents/pictures/childhood1.jpg",
-  "/graphicComponents/pictures/childhood2.jpg",
-  "/graphicComponents/pictures/childhood3.jpg",
-  "/graphicComponents/pictures/childhood4.jpg",
-  "/graphicComponents/pictures/childhood5.jpg",
+  "/graphicComponents/main/childhood1.jpg",
+  "/graphicComponents/main/childhood2.jpg",
+  "/graphicComponents/main/childhood3.jpg",
+  "/graphicComponents/main/childhood4.jpg",
+  "/graphicComponents/main/childhood5.jpg",
 ]
 const childhoodDelay = (index) => {
   return index === 0 ? "0s" : `-${(childhoodImages.length - index) * 3}s`

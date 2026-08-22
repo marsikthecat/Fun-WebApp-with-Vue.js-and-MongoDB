@@ -1,8 +1,8 @@
 <script setup>
 import {computed, onMounted, ref} from "vue";
-import {customPopup} from "../../assets/features.js";
-import {useApi} from "../composables/useApi.js";
-import {useAuth} from "../composables/useAuth.js";
+import {customPopup} from "../../../assets/features.js";
+import {useApi} from "../../composables/useApi.js";
+import {useAuth} from "../../composables/useAuth.js";
 
 const api = useApi();
 const {check} = useAuth();

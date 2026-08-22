@@ -1,15 +1,16 @@
 ## Ideas/to be considered
-- Animations in Quiz.vue
 
 ## Open
-- Feat: Star-animation in Service.vue when hovering the green button
-- Refactor: Compress size of the three videos
-- Rename: Rename all assets like images and videos so their purpose is clear
+- Auth should also check for role, not just for key if user is admin
+- Feat: Animations in Quiz.vue
+- Feat: Start button "start quiz" before the quiz starts
 
 ## In Progress
+- Refactor: Compress size of the three videos
 - Fix: Timeline style and overflow
 
 ## Done
+- Rename: Rename all assets like images and videos so their purpose is clear
 - Fix: Animate legal notice content better
 - Feat: After successful logout, instead of dialog, bye bye bubble
 - Fix: Welcome bubble is weird

@@ -11,6 +11,7 @@ const snackBar = ref()
 const api = useApi();
 
 const router = useRouter();
+const showLogoutBubble = ref(sessionStorage.getItem("logoutMessage") !== null);
 
 const loginState = reactive({
   userNameInput: '',
@@ -103,7 +104,7 @@ const passwordInputRules = [
 
 <template>
   <div id="global">
-    <WelcomeBubble />
+    <WelcomeBubble v-if="showLogoutBubble" />
     <SnackBar ref="snackBar" />
     <div id="container">
       <h2>Are you ready for Marsik?</h2>

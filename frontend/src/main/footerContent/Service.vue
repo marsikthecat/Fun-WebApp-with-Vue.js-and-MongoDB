@@ -1,6 +1,6 @@
 <script setup>
 import {ref} from "vue";
-import {customPopup} from "../../assets/features.js";
+import {customPopup} from "../../../assets/features.js";
 
 const date = new Date();
 date.setFullYear(date.getFullYear() + 2);
@@ -15,7 +15,7 @@ const dateTxt = ref("Expiration date: " + monthNames[date.getMonth()] + " " + da
     <div class="container">
       <h3>Marsik presents...</h3>
     </div>
-    <img src="/graphicComponents/footer/Bildungskätzchen.jpg" title="Marsik der Bildungskätzchen" alt="education-cat">
+    <img src="/graphicComponents/footer/educationCat.jpg" title="Marsik the educational kitten" alt="education-cat">
     <div class="container">
       <h2><b>Education by Kitty</b></h2>
       <p> This brand new project was initiated by Marsik with the goal of providing the future generation with sufficient <strong>education</strong> so that the future,

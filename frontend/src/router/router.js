@@ -4,24 +4,24 @@ import Login from '../login/Login.vue';
 import AdminPanel from "../admin/adminPanel.vue";
 import Unauthorised from "../../assets/Unauthorised.vue";
 // Wrapper for main pages
-import Main from "../mainPages/MainLayout.vue";
+import Main from "../main/MainLayout.vue";
 // Wrapper for footer pages
-import FooterLayout from '../mainPages/FooterLayout.vue';
+import FooterLayout from '../main/FooterLayout.vue';
 // Main Pages
-import Home from '../mainPages/contents/Home.vue';
-import Impressions from '../mainPages/contents/Impressions.vue';
-import Videos from '../mainPages/contents/Videos.vue';
-import Contact from "../mainPages/contents/Contact.vue";
+import Home from '../main/mainContent/Home.vue';
+import Impressions from '../main/mainContent/Impressions.vue';
+import Videos from '../main/mainContent/Videos.vue';
+import Contact from "../main/mainContent/Contact.vue";
+import Chat from "../main/mainContent/Chat.vue";
 // Footer Pages
-import Career from "../footerPages/Career.vue";
-import Help from "../footerPages/Help.vue";
-import LegalNotice from "../footerPages/LegalNotice.vue";
-import News from "../footerPages/News.vue";
-import Privacy from "../footerPages/Privacy.vue";
-import Quiz from "../footerPages/Quiz.vue";
-import Service from "../footerPages/Service.vue";
-import TermsOfUse from "../footerPages/TermsOfUse.vue";
-import Chat from "../mainPages/contents/Chat.vue";
+import Career from "../main/footerContent/Career.vue";
+import Help from "../main/footerContent/Help.vue";
+import LegalNotice from "../main/footerContent/LegalNotice.vue";
+import News from "../main/footerContent/News.vue";
+import Privacy from "../main/footerContent/Privacy.vue";
+import Quiz from "../main/footerContent/Quiz.vue";
+import Service from "../main/footerContent/Service.vue";
+import TermsOfUse from "../main/footerContent/TermsOfUse.vue";
 
 const routes = [
     {   path: '/', redirect: '/login'},

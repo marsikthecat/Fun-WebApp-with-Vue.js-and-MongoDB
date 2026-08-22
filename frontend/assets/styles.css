@@ -1,6 +1,6 @@
 #global
 {
-    background: bisque url(../public/graphicComponents/pictures/background.jpg) no-repeat fixed;
+    background: bisque url(/graphicComponents/main/background.jpg) no-repeat fixed;
     overflow: hidden;
 }
 
