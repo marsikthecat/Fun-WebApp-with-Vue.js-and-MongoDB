@@ -2,12 +2,11 @@
 
 ## Open
 - Fix: Timeline style and overflow
-- Auth should also check for role, not just for key if user is admin
 
 ## In Progress
-- Refactor: Compress size of the three videos
 
 ## Done
+- Auth should also check for role, not just for key if user is admin
 - Feat: Start button "start quiz" before the quiz starts
 - Rename: Rename all assets like images and videos so their purpose is clear
 - Fix: Animate legal notice content better

@@ -30,6 +30,9 @@ public class MailController {
     if (!TokenManager.exists(token)) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
+    if (!TokenManager.isAdmin(token)) {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    }
     List<Message> messages = mailService.getAllMessages();
     return ResponseEntity.status(HttpStatus.OK).body(messages);
   }

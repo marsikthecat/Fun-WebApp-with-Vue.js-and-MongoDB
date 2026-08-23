@@ -30,10 +30,13 @@ public class UserController {
 
   @GetMapping
   public ResponseEntity<?> getAllUsers(@RequestHeader("Authorization") String token) {
-    List<User> users = userService.getAllUsers(token);
-    if (users == null) {
-      ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    if (!TokenManager.exists(token)) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
+    if (!TokenManager.isAdmin(token)) {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    }
+    List<User> users = userService.getAllUsers(token);
     return ResponseEntity.status(HttpStatus.OK).body(users);
   }
 

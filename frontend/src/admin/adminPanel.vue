@@ -11,6 +11,8 @@ const {check} = useAuth();
 const users = ref([]);
 const messagesList = ref([]);
 const quizList = ref([]);
+const quizPage = ref(1);
+const quizItemsPerPage = 8;
 const questionForm = ref({
   question: "",
   options: ["", "", "", ""],
@@ -98,9 +100,10 @@ const addQuestion = async () => {
     const addQuestionRequest = await api.storeQuizQuestion(questionText, correctIndex, options);
     if (addQuestionRequest.status === 200) {
       const newAddedQuestion = addQuestionRequest.data;
-      quizList.value.push({id: newAddedQuestion.id, question: newAddedQuestion.question,
+      quizList.value = [...quizList.value, {id: newAddedQuestion.id, question: newAddedQuestion.question,
         options: newAddedQuestion.options,
-        correctIndex: newAddedQuestion.correctIndex});
+        correctIndex: newAddedQuestion.correctIndex}];
+      quizPage.value = Math.ceil(quizList.value.length / quizItemsPerPage);
       resetQuestionForm();
       addQuestionDialog.value = false;
     } else {
@@ -108,8 +111,6 @@ const addQuestion = async () => {
     }
   }
 }
-
-const focusOption = (num) => document.getElementsByClassName("input-field")[num].focus();
 
 const isNotFilled = (...fields) => fields.some(f => f === null || f === undefined || f.toString().length === 0);
 </script>
@@ -158,7 +159,8 @@ const isNotFilled = (...fields) => fields.some(f => f === null || f === undefine
       </div>
       <div class="section">
         <h2 class="section-title"> Quiz App Management</h2>
-        <v-data-table :headers="headers" :items="quizList" hide-default-footer>
+        <v-data-table v-model:page="quizPage" :headers="headers" :items="quizList"
+                :items-per-page="quizItemsPerPage">
           <template v-slot:top>
             <v-toolbar flat color="red">
               <v-toolbar-title>Quiz App Management</v-toolbar-title>
@@ -168,7 +170,6 @@ const isNotFilled = (...fields) => fields.some(f => f === null || f === undefine
           </template>
           <template #item.actions="{ item }">
             <div class="d-flex ga-2 justify-end">
-              <v-icon icon="mdi-pencil" color="medium-emphasis" size="small"></v-icon>
               <v-icon icon="mdi-delete" color="medium-emphasis" size="small" @click="openDeleteDialog(item)"></v-icon>
             </div>
           </template>

@@ -80,7 +80,7 @@ public class UserService {
 
   public LoginResult login(@RequestBody User user) {
     if (isAdmin(user.getName(), user.getPassword())) {
-      String token = TokenManager.setToken(TOKEN_SIZE);
+      String token = TokenManager.setToken(TOKEN_SIZE, true);
       return new LoginResult(token, true);
     }
     User u = isUserRegistered(user.getName(), user.getPassword());

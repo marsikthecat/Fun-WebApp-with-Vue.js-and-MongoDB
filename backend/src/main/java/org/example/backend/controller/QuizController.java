@@ -32,6 +32,9 @@ public class QuizController {
     if (!TokenManager.exists(token)) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
+    if (!TokenManager.isAdmin(token)) {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    }
     List<QuizQuestion> questionList = quizService.getAllQuestions();
     return ResponseEntity.status(HttpStatus.OK).body(questionList);
   }
