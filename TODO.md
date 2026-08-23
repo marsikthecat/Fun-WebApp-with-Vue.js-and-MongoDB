@@ -1,11 +1,11 @@
 ## Ideas/to be considered
 
 ## Open
-- Fix: Timeline style and overflow
 
 ## In Progress
 
 ## Done
+- Fix: Timeline style and overflow
 - Auth should also check for role, not just for key if user is admin
 - Feat: Start button "start quiz" before the quiz starts
 - Rename: Rename all assets like images and videos so their purpose is clear

@@ -21,11 +21,17 @@
           </div>
         </template>
 
-        <v-card 
-          class="news-card"
-          :class="`border-l-4 border-${item.color}`"
-          elevation="2"
-        >
+        <div class="news-item-content">
+          <div class="mobile-date text-caption font-weight-bold">
+            <span class="text-primary">{{ item.date }}</span>
+            <span class="text-grey">{{ item.time }}</span>
+          </div>
+
+          <v-card
+            class="news-card"
+            :class="`border-l-4 border-${item.color}`"
+            elevation="2"
+          >
           <v-card-title class="pb-2">
             <v-row no-gutters align="center" class="gap-2">
               <v-icon :color="item.color" size="small">{{ item.icon }}</v-icon>
@@ -49,7 +55,8 @@
               {{ tag }}
             </v-chip>
           </v-card-actions>
-        </v-card>
+          </v-card>
+        </div>
       </v-timeline-item>
     </v-timeline>
 </template>
@@ -109,6 +116,7 @@ const timelineItems = ref([
 <style scoped>
 .news-card 
 {
+  min-width: 0;
   transition: all 0.3s ease;
   border-radius: 8px;
   border-left: 4px solid;
@@ -130,10 +138,47 @@ const timelineItems = ref([
   box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.8);
 }
 
+.mobile-date
+{
+  display: none;
+}
+
 @media (max-width: 960px) 
 {
   :deep(.v-timeline) {
     padding-left: 0;
+  }
+}
+
+@media (max-width: 700px)
+{
+  :deep(.v-timeline-item__opposite)
+  {
+    display: none;
+  }
+
+  :deep(.v-timeline-item__body)
+  {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .news-item-content
+  {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .mobile-date
+  {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .news-card
+  {
+    width: 100%;
   }
 }
 </style>
